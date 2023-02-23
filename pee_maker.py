@@ -40,6 +40,35 @@ def open_sheet(DATE, thing):
         except:
             return csv_to_dataframe(MONTH, YEAR, thing)
 
+# function to load in everyone and return a list
+def load_163():
+    
+    # load in all external files as a list
+    with open('flight_personnel/ALPHA.json') as alpha_json:
+        alpha_list = load(alpha_json)
+
+    with open('flight_personnel/BRAVO.json') as bravo_json:
+        bravo_list = load(bravo_json)
+
+    with open('flight_personnel/OTHERS.json') as others_json:
+        others_list = load(others_json)
+
+    # assigning flight to personnel
+    def update_flight(flight_dict, flight):
+        for x in flight_dict:
+            x['FLIGHT'] = flight
+
+    update_flight(alpha_list, 'ALPHA')
+    update_flight(bravo_list, 'BRAVO')
+    update_flight(others_list, 'OTHERS')
+
+    everyone_list = []
+
+    # merging alpha, bravo and others into one list called everyone
+    everyone_list.extend(alpha_list + bravo_list + others_list)
+
+    return everyone_list
+
 # function to update everyone list
 def update(main_column, condition, edit_column, value):
     
@@ -59,22 +88,15 @@ def load_ME_sheet(DATE):
 
     global everyone_list
 
-    everyone_list = []
+    # loads in everyone from alpha, bravo and others
+    # includes rank, name in ME, displayed name, flight and whether the personnel is a regular or NSF
+    everyone_list = load_163()
 
     # obtain DAY from DATE
     date_datetime = datetime_convert(DATE)
     DAY = int(date_datetime.strftime('%#d'))
 
     # loading in all external files into code as a dictionary/list
-    with open('flight_personnel/ALPHA.json') as alpha_json:
-        alpha_list = load(alpha_json)
-
-    with open('flight_personnel/BRAVO.json') as bravo_json:
-        bravo_list = load(bravo_json)
-
-    with open('flight_personnel/OTHERS.json') as others_json:
-        others_list = load(others_json)
-
     with open('references/callsign_ref.json') as callsign_ref_json:
         callsign_ref_dict = load(callsign_ref_json)
 
@@ -87,18 +109,6 @@ def load_ME_sheet(DATE):
     # load in ME sheet
     ME_df = open_sheet(DATE, 'ME')
 
-    # assigning flight to personnel
-    def update_flight(flight_dict, flight):
-        for x in flight_dict:
-            x['FLIGHT'] = flight
-
-    update_flight(alpha_list, 'ALPHA')
-    update_flight(bravo_list, 'BRAVO')
-    update_flight(others_list, 'OTHERS')
-
-    # merging alpha, bravo and others into one list called everyone
-    everyone_list.extend(alpha_list + bravo_list + others_list)
-
     # assign UNKNOWN status to everyone
     for x in everyone_list:
         x['STATUS_IN_PS'] = 'UNKNOWN'
@@ -110,15 +120,16 @@ def load_ME_sheet(DATE):
     # assign status to personnel
     # status taken from ME sheet
     # leading and trailing whitespaces removed from name and status
+    # if / present leading and trailing whitespaces also removed
     for x in range(9, len(ME_df) - 33):
         if ME_df.iloc[x, 0] != 'NIL' and x != 60:
-            update('NAME_IN_PS', ME_df.iloc[x, 0].upper().strip(), 'STATUS_IN_PS', ME_df.iloc[x, DAY].upper().strip())
+            update('NAME_IN_PS', ME_df.iloc[x, 0].upper().strip(), 'STATUS_IN_PS', re.sub('\s/\s', '/', ME_df.iloc[x, DAY].upper().strip()))
     
     # HIGHEST PRIORITY
     # override status from ME sheet
     for x in override_ps_list:
         if datetime_convert(x['START_DATE']) <= datetime_convert(DATE) <= datetime_convert(x['END_DATE']):
-            update('NAME_IN_PS', x['NAME_IN_PS'], 'STATUS_IN_PS', x['STATUS'])
+            update('NAME_IN_PS', x['NAME_IN_PS'], 'STATUS_IN_PS', x['STATUS_IN_PS'])
     
     # assign everyone a number to their rank for easy sorting
     for x in rank_sorting_dict:
@@ -154,27 +165,27 @@ def load_standby_and_duty():
         successful = False
         while not successful:
             if x['RANK_SORT'] in range(9, 12) and count == 0:
-                duty_list_ran.append(x['RANK'] + ' ' + x['DISPLAY_NAME'])
+                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
                 count += 1
                 successful = True
             elif x['RANK_SORT'] >= 5 and count == 1:
-                duty_list_ran.append(x['RANK'] + ' ' + x['DISPLAY_NAME'])
+                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
                 count += 1
                 successful = True
             elif x['RANK_SORT'] in range(2, 9) and count == 2:
-                duty_list_ran.append(x['RANK'] + ' ' + x['DISPLAY_NAME'])
+                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
                 count += 1
                 successful = True
             elif x['RANK_SORT'] in range(2, 9) and count == 3:
-                duty_list_ran.append(x['RANK'] + ' ' + x['DISPLAY_NAME'])
+                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
                 count += 1
                 successful = True
             elif x['RANK_SORT'] in range(1, 3) and count == 4:
-                duty_list_ran.append(x['RANK'] + ' ' + x['DISPLAY_NAME'])
+                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
                 count += 1
                 successful = True
             elif x['RANK_SORT'] in range(1, 3) and count == 5:
-                duty_list_ran.append(x['RANK'] + ' ' + x['DISPLAY_NAME'])
+                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
                 count += 1
                 successful = True
             elif count == 6:
@@ -196,15 +207,15 @@ def load_standby_and_duty():
         successful = False
         while not successful:
             if x['RANK_SORT'] in range(9, 12) and count == 0:
-                standby_list_ran.append(x['RANK'] + ' ' + x['DISPLAY_NAME'])
+                standby_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
                 count += 1
                 successful = True
             elif x['RANK_SORT'] in range(2, 9) and count == 1:
-                standby_list_ran.append(x['RANK'] + ' ' + x['DISPLAY_NAME'])
+                standby_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
                 count += 1
                 successful = True
             elif x['RANK_SORT'] in range(1, 3) and count == 2:
-                standby_list_ran.append(x['RANK'] + ' ' + x['DISPLAY_NAME'])
+                standby_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
                 count += 1
                 successful = True
             elif count == 3:
@@ -307,16 +318,14 @@ def categorise_ps():
         
         # check for statuses with SB and another status (not inclusive of U/S and O/S)
         # picks the other status
-        # removes whitespace before and after status
         if re.search('.{2,}/.{2,}', x['STATUS_IN_PS']) and 'SB' in x['STATUS_IN_PS']:
-            x['DOMINANT_STATUS'] = [y.strip() for y in x['STATUS_IN_PS'].split('/') if y.strip() != 'SB'][0]
+            x['DOMINANT_STATUS'] = [y for y in x['STATUS_IN_PS'].split('/') if y != 'SB'][0]
         
         # check for statuses with 2 different statuses (not inclusive of U/S, O/S and SB)
         # one is anything (not inclusive of SB) and the other is in the more dominant status list
         # picks the more dominant status
-        # removes whitespace before and after status
         elif re.search('.{2,}/.{2,}', x['STATUS_IN_PS']) and not set(more_dominant_status).isdisjoint(x['STATUS_IN_PS'].replace(' ', '').split('/')):
-            x['DOMINANT_STATUS'] = [y.strip() for y in x['STATUS_IN_PS'].split('/') if y.strip() in more_dominant_status][0]
+            x['DOMINANT_STATUS'] = [y for y in x['STATUS_IN_PS'].split('/') if y in more_dominant_status][0]
             
             # sets the display status as status in ps so that actual status can be seen on parade state
             x['DISPLAY_STATUS'] = x['STATUS_IN_PS']
@@ -366,9 +375,9 @@ def categorise_ps():
         
         print.append(x['DISPLAY_NAME'])
         
-        # if display status does not need t be displayed, do not add a display status
+        # if display status does not need to be displayed, do not add a display status
         if x['DISPLAY_STATUS'] != 'NIL':
-            print.append('(' + x['DISPLAY_STATUS'] + ')')
+            print.append(f'({x["DISPLAY_STATUS"]})')
         
         x['PRINT'] = ' '.join(print)
     
@@ -401,17 +410,18 @@ def front_ps(DATE, cos, flight):
     # start of the printing
     cat = sort_by_category_for_flight(flight)
     
-    front_ps = f'Good Day ALPHA, below is the Forecasted Parade State for {DATE}.\n\n' \
+    known_ps = f'Good Day ALPHA, below is the Forecasted Parade State for {DATE}.\n\n' \
                f'COS: {cos}\n\n' \
                f'TOTAL STRENGTH ({total_strength(cat)})\n\n'
-
-    # combines the string above with the different categories and their personnel into one string (front_ps) to be returned
+    
+    # combines the string above with the different categories and their personnel into two strings (front_ps and unknown_ps) to be returned
     for x in cat:
-
             if x != 'UNKNOWN':
-                front_ps += f'{x}: ({len(cat[x])})\n' + '\n'.join(cat[x]) + '\n\n'
+                known_ps += f'{x}: ({len(cat[x])})\n' + '\n'.join(cat[x]) + '\n\n'
+            else:
+                unknown_ps = '\n'.join(cat[x])
 
-    return front_ps
+    return known_ps, unknown_ps
     
 
 def middle_ps(DATE, bf_pax, lunch_pax, dinner_pax, flight):

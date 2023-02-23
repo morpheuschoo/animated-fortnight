@@ -17,7 +17,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # /help
 async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text='NOTE: [DATE] will be in [DD][MM][YY] format\n'
-                                                                           '(eg 20th Jan 2023 will be written as 200123)\n')
+                                                                          '(eg 20th Jan 2023 will be written as 200123)\n')
 
     await context.bot.send_message(chat_id=update.effective_chat.id,
                                    text='Stuff you can do with the bot:\n\n'
@@ -69,12 +69,18 @@ async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
         update_adw(DATE)
         categorise_ps()
 
-        # sends the message
-        await context.bot.send_message(chat_id=update.effective_chat.id, text = f'{front_ps(DATE, username_ref_dict[update.message.from_user.username], "alpha")}'
-                                                                                    f'---------------------------------------------------\n\n'
-                                                                                    f'{middle_ps(DATE, 5, 7, 5, "alpha")}'
-                                                                                    f'---------------------------------------------------\n\n'
-                                                                                    f'{end_ps(DATE)}')
+        known_ps, unknown_ps = front_ps(DATE, username_ref_dict[update.message.from_user.username], "alpha")
+
+        # sends the parade state
+        await context.bot.send_message(chat_id=update.effective_chat.id, text = f'{known_ps}'
+                                                                                f'---------------------------------------------------\n\n'
+                                                                                f'{middle_ps(DATE, 5, 7, 5, "alpha")}'
+                                                                                f'---------------------------------------------------\n\n'
+                                                                                f'{end_ps(DATE)}')
+
+        # if there are unknowns in parade state, unknowns will be listed and sent in another message
+        if unknown_ps != "":
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=f'UNKNOWN:\n{unknown_ps}')
     
     except:
         await context.bot.send_message(chat_id=update.effective_chat.id, text='The bot is broken or you didnt type in a valid date (uh oh)')
@@ -113,6 +119,42 @@ async def print_multiple_weekend_duty(update: Update, context: ContextTypes.DEFA
         await context.bot.send_message(chat_id=update.effective_chat.id, text='The bot is broken or you didnt type in valid dates (uh oh)')
         await context.bot.send_message(chat_id=update.effective_chat.id, text='\U0001F613')
         return
+    
+# /ol
+async def print_override_ps_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        with open('override/override_ps.json') as override_ps_json:
+            override_ps_list = load(override_ps_json)
+        
+        everyone_list = load_163()
+
+        combined = {}
+
+        # iterrates through the override ps list
+        # creates a dictionary:
+        # KEY: name in parade state
+        # VALUE: [0]-rank + displayed name / [1 and above]-status with start date and end date
+        for x in override_ps_list:
+            for y in everyone_list:
+                if x['NAME_IN_PS'] == y['NAME_IN_PS']:
+                    if x['NAME_IN_PS'] not in combined:
+                        combined[x['NAME_IN_PS']] = [y['RANK'] + ' ' + y['DISPLAY_NAME'] if y['RANK'] != 'NIL' else y['DISPLAY_NAME']]
+                    
+                    combined[x['NAME_IN_PS']].append(f'{x["START_DATE"]} to {x["END_DATE"]} ({x["STATUS_IN_PS"]})')
+
+        print_combined = f'<<<OVERRIDE LIST>>>\n\n'
+
+        for x in combined.values():
+            print_combined += f'{x[0]}:\n' + '\n'.join(x[1:]) + '\n\n'
+
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=print_combined)
+            
+    except:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text='Override list is empty')
+
+# /oa
+async def override_ps_add(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    poo
 
 if __name__ == '__main__':
     
@@ -140,5 +182,8 @@ if __name__ == '__main__':
 
     # /duty [START DATE] [END DATE]
     bot.add_handler(CommandHandler('duty', print_multiple_weekend_duty))
+
+    # /ol
+    bot.add_handler(CommandHandler('ol', print_override_ps_list))
     
     bot.run_polling()
