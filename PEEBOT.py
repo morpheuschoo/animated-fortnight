@@ -528,7 +528,7 @@ def duty_compiler(username, start_date, *args):
 import logging
 from telegram import Update
 from telegram.ext import filters, ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 # tells you when the programme starts / stops (in console)
 logging.basicConfig(
