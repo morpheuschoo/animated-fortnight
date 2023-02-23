@@ -3,7 +3,6 @@ from ujson import load, dump
 import datetime
 import re
 import os
-import schedule
 
 # loads in ME/ADW google sheet and returns it as a dataframe
 def csv_to_dataframe(month_num, year, thing):
@@ -529,6 +528,7 @@ def duty_compiler(username, start_date, *args):
 import logging
 from telegram import Update
 from telegram.ext import filters, ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler
+from dotenv import load_dotenv
 
 # tells you when the programme starts / stops (in console)
 logging.basicConfig(
@@ -605,7 +605,12 @@ async def print_multiple_weekend_duty(update: Update, context: ContextTypes.DEFA
         return
 
 if __name__ == '__main__':
-    bot = ApplicationBuilder().token('6005706881:AAENa--bPIik5iuk1ap1dAAlXVkBzKs-fM8').build()
+    
+    load_dotenv()
+
+    API_KEY = os.getenv('API_KEY')
+
+    bot = ApplicationBuilder().token(API_KEY).build()
 
     # /start
     bot.add_handler(CommandHandler('start', start))
