@@ -1,0 +1,44 @@
+ ,Saturday,Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday.1,Sunday.1,Monday.1,Tuesday.1,Wednesday.1,Thursday.1,Friday.1,Saturday.2,Sunday.2,Monday.2,Tuesday.2,Wednesday.2,Thursday.2,Friday.2,Saturday.3,Sunday.3,Monday.3,Tuesday.3,Wednesday.3,Thursday.3,Friday.3,Saturday.4,Sunday.4,Monday.4,Tuesday.4
+SR,NIL,NIL,NIL,163,163,160,160,NIL,NIL,160,NIL,NIL,NIL,160,NIL,NIL,165,NIL,NIL,165,165,NIL,NIL,NIL,NIL,163,NIL,163,NIL,NIL,160 & 163,165
+Events,NIL,NY,NY PH Make-up,NIL,NIL,"RSD, BV",BV,BV,NIL,BV,BV,NIL,XFaS WUT (Dual),BV,NIL,NIL,NIL,XVS,XVS + XES,NIL,NIL,CNY Eve,CNY Day 1,CNY Day 2,CNY PH Make-up,NIL,BV,NIL,BV,NIL,BV,NIL
+NIL,31 December,1 January,2 January,3 January,4 January,5 January,6 January,7 January,8 January,9 January,10 January,11 January,12 January,13 January,14 January,15 January,16 January,17 January,18 January,19 January,20 January,21 January,22 January,23 January,24 January,25 January,26 January,27 January,28 January,29 January,30 January,31 January
+A2(D),Focus,Eyemo,Crafter,Kym,Hector,Laser,Tonic,Idol,Aslan,Bus,Laser,Idol,Mafia,Mafia,Tonic,Tonic,Hector,Tonic,Bus,Crafter,Laser,Tonic,Eyemo,Bus,Eyemo,Crafter,Tonic,Snap,Halftime,Laser,Eyemo,Snap
+A2(N),Rhythm,Hector,Wicad,Bus,Focus,Eyemo,Kym,Mafia,Tonic,Focus,Bus,Wicad,Bus,Eyemo,Laser,Focus,Wicad,Hector,Wicad,Eyemo,Hector,Halftime,Wicad,Focus,Wicad,Hector,Eyemo,Trickshot,Snap,Rhythm,Trickshot ,Eyemo
+G1,Icepack/Jitsu,Darts,Jitsu/Centaur,Chisel,Icepack,Jitsu,Centaur(R),Halo,Icepack,Lightyear(R),Beast,Chisel,Darts(R),Halo(R),Hammer,Icepack,Ion,Chisel,Lightyear,Diva,Hammer,Beast/Lightyear,Beast,Icepack/Chisel,Centaur,Hammer,Lightyear/Beast,Hammer,Diva,Hammer,Chisel(R),Beast
+G2,Tonic/Chimney,Beast,Chimney,Tonic,Chimney,Comic,Psycho(R),Seeker,Chimney,Sprite(R),Psycho,Tonic,Rubik(R),Sprite(R),Scooby,Rubik,Chimney,Comic ,Mafia,Tonic,Comic,Gengar/Aslan,Gengar/Psycho,Mafia/Sprite,Mafia/Psycho,Gengar,Psycho,Tonic/Ion,Sprite,Aslan,Mafia(R),Gengar
+G3A,Zinc,Two-face,Zinc,Gundam,Two-face,Zinc,Sprite(R),Do-it,Hybrid,Zinc/Two-face(R),Baller,Hybrid,Two-face(R),Gundam(R),Zinc,Two-face,Hybrid,Zinc,Gundam,Do-it,Two-face,Gundam,Ignite,Snap,Do-it,Cloudy,Do-it,Hybrid,Cloudy,Zinc,Do-it(R),Cloudy
+G3S,Audi,Double,Cadence,Jeremy,Cadence,Jeremy,Laser(R),Fury,Audi,Fury(R),Cadence,Double/Bullet,Jeremy(R),Bullet(R),Jeremy,Comic,Double,Bullet,Viking,Calcium,Jeremy,Laser/Bullet,Viking/Fury,Jeremy/Cadence,Fury/Laser,Bullet,Double/Cadence,Double,Bullet,Jeremy,SANS(R),Jeremy/Viking
+G4,Karma,Slayer,Choi,Rudolph,Seed,Sean,Seed,Priscilla,Demo,Egal,Choi,Swift,Priscilla,Threemen,Karma,Choi,Ikea,Priscilla,Bentoh,Tim,Rudolph,Karma,Ikea,Sonic,Demo,Bentoh,Tim,Demo,Swift,Egal,Rudolph,ChernYoong
+A2(D) Stby,Crafter,Wicad,NIL,NIL,Wicad,Mafia,NIL,Trickshot,Laser,Eyemo,Mafia,Focus,NIL,Laser,NIL,NIL,Eyemo,NIL,Laser,Idol,NIL,Mafia,Bus,Hector,Hector,Halftime,Wicad,Laser,Crafter,Mafia,Bus,Tonic
+A2(N) Stby,Kym,Bus,Eyemo,Hector,NIL,Focus,Focus,Laser,NIL,Halftime,Wicad,Eyemo,Eyemo,Wicad,Mafia,Halftime,Bus,Eyemo,Bus,Hector,Eyemo,Crafter,Hector,Crafter,Bus,Eyemo,Crafter,Focus,Tonic,Halftime,Crafter,Bus
+G1 Stby,Jitsu/Icepack,Hammer,Centaur/Jitsu,Icepack,Lightyear,Chisel,Beast,Beast,Chisel,Chisel,Icepack,Centaur,Lightyear,Chisel,Beast,Hammer,Beast,Icepack,Icepack,Jitsu,Beast,Lightyear/Beast,Centaur,Chisel/Icepack,Beast,Lightyear,Chisel,Centaur,Centaur,Chisel,Centaur,Hammer
+G2 Stby,Chimney/Tonic,Comic,Tonic,Sprite,Psycho,Tonic,Chimney,Sprite,Psycho,Mafia,Comic,Psycho,Psycho,Gengar,Gengar,Sprite,Gengar,Psycho,Comic/Tonic,Chimney,Sprite,Aslan/Gengar,Psycho/Comic,Sprite/Mafia,Psycho/Mafia,Tonic,Comic,Sprite,Psycho,Sprite,Chimney,Comic
+G3A Stby,Do-it,Do-it,Snap,Hybrid,Sprite,Gundam,Hybrid,Two-face,Zinc,Gundam,Zinc,Sprite,Gundam,Zinc,Do-it,Do-it,Gundam,Chimney,Ignite,Two-face,Zinc,Do-it,Two-face,Cloudy,Two-face,Hybrid,Zinc,Cloudy,Do-it,Do-it,Hybrid,Zinc
+G3S Stby,Jeremy,Audi,Jeremy,Laser,Laser,Audi,Fury,Audi,Jeremy,Bullet,Audi,Fury,Cadence,Cadence,Bullet,Fury,Laser,Fury,Jeremy,Fury,Bullet,Bullet/Laser,Fury/Viking,Cadence/Jeremy,Laser/Fury,Viking,Jeremy,Fury,Cadence,Fury,Bullet,Viking/Jeremy
+G4 Stby,Tim,Priscilla,Seed,Karma,Egal,Choi,Ikea,Bentoh,Seed,Karma,Demo,Egal,Choi,Demo,Swift,EngChow,Karma,Choi,Demo,Priscilla,YanJun,Choi,Bentoh,Egal,Rudolph,Swift,Choi,Egal,Karma,Bentoh,Priscilla,Demo
+NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL, ,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,Legend,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,163SQN,165 SQN,DAG,160 SQN,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,CHISEL,Darts,Tim,HECTOR,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,ICEPACK,Centaur,Volley,BUS,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,CHIMNEY,Jitsu,Gambit,EYEMO,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,HAMMER,Beast,Trickshot,WICAD,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,PROTEIN,Dobby,Sean,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,TONIC,Comic,Lennon,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,GENGAR,PSYCHO,Tofu,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,SEEKER,Audi,Egal,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,SNAP,Fury,Seed,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,HALO,Double,Crafter,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,SCOOBY,Sidebet,Rudolph,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,BALLER ,Mafia,Karma,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,HYBRID,Laser,Sonic,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,SPRITE,Cadence,KYM,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,DO-IT,Bullet,Threemen,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,ZINC,Lightyear,Halftime,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,RUBIK,Diva,Bentoh,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,NIL,Ion,Slayer,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,NIL,Spaceman,Faisal,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,NIL,Calcium,Swift,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,NIL,Temba,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,NIL,Razor,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL
+NIL,NIL,Ram,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL

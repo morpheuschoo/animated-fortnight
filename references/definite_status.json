@@ -1,0 +1,162 @@
+[
+ {
+  "DOMINANT_STATUS": "NIL",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "PRESENT"
+ },
+ {
+  "DOMINANT_STATUS": "SB",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "PRESENT"
+ },
+ {
+  "DOMINANT_STATUS": "ROUTE FAM",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "PRESENT"
+ },
+ {
+  "DOMINANT_STATUS": "X",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "DYME"
+ },
+ {
+  "DOMINANT_STATUS": "OFF",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "OFF"
+ },
+ {
+  "DOMINANT_STATUS": "\\",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "C\/O"
+ },
+ {
+  "DOMINANT_STATUS": "SIC",
+  "DISPLAY_STATUS": "SIC",
+  "CATEGORY": "CSE"
+ },
+ {
+  "DOMINANT_STATUS": "RIGGER",
+  "DISPLAY_STATUS": "RIGGER",
+  "CATEGORY": "CSE"
+ },
+ {
+  "DOMINANT_STATUS": "GWT",
+  "DISPLAY_STATUS": "GWT",
+  "CATEGORY": "CSE"
+ },
+ {
+  "DOMINANT_STATUS": "OEMP",
+  "DISPLAY_STATUS": "OEMP",
+  "CATEGORY": "CSE"
+ },
+ {
+  "DOMINANT_STATUS": "SP",
+  "DISPLAY_STATUS": "SP",
+  "CATEGORY": "O\/S"
+ },
+ {
+  "DOMINANT_STATUS": "HFD",
+  "DISPLAY_STATUS": "HFD",
+  "CATEGORY": "O\/S"
+ },
+ {
+  "DOMINANT_STATUS": "R",
+  "DISPLAY_STATUS": "R",
+  "CATEGORY": "O\/S"
+ },
+ {
+  "DOMINANT_STATUS": "XVS",
+  "DISPLAY_STATUS": "XVS",
+  "CATEGORY": "O\/S"
+ },
+ {
+  "DOMINANT_STATUS": "U\/S",
+  "DISPLAY_STATUS": "U\/S",
+  "CATEGORY": "O\/S"
+ },
+ {
+   "DOMINANT_STATUS": "O\/S",
+   "DISPLAY_STATUS": "ME",
+   "CATEGORY": "O\/S"
+ },
+ {
+  "DOMINANT_STATUS": "ESCORT",
+  "DISPLAY_STATUS": "ESCORT",
+  "CATEGORY": "O\/S"
+ },
+ {
+  "DOMINANT_STATUS": "IMT",
+  "DISPLAY_STATUS": "IMT",
+  "CATEGORY": "O\/S"
+ },
+ {
+  "DOMINANT_STATUS": "CS",
+  "DISPLAY_STATUS": "CS",
+  "CATEGORY": "O\/S"
+ },
+ {
+  "DOMINANT_STATUS": "ME",
+  "DISPLAY_STATUS": "ME",
+  "CATEGORY": "O\/S"
+ },
+ {
+  "DOMINANT_STATUS": "OSL",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "OSL"
+ },
+ {
+  "DOMINANT_STATUS": "LL",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "LL"
+ },
+ {
+  "DOMINANT_STATUS": "MA",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "MA"
+ },
+ {
+  "DOMINANT_STATUS": "MC",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "MC"
+ },
+ {
+  "DOMINANT_STATUS": "RSO",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "RSO"
+ },
+ {
+  "DOMINANT_STATUS": "CCL",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "CCL"
+ },
+ {
+  "DOMINANT_STATUS": "PCL",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "PCL"
+ },
+ {
+  "DOMINANT_STATUS": "HL",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "HL"
+ },
+ {
+  "DOMINANT_STATUS": "UL",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "UL"
+ },
+ {
+  "DOMINANT_STATUS": "CL",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "CL"
+ },
+ {
+  "DOMINANT_STATUS": "FFI",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "FFI"
+ },
+ {
+  "DOMINANT_STATUS": "UNKNOWN",
+  "DISPLAY_STATUS": "NIL",
+  "CATEGORY": "UNKNOWN"
+ }
+]
