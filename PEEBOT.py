@@ -528,7 +528,7 @@ def duty_compiler(username, start_date, *args):
 import logging
 from telegram import Update
 from telegram.ext import filters, ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 # tells you when the programme starts / stops (in console)
 logging.basicConfig(
@@ -542,34 +542,34 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # /f [DATE]
 async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    try:
-        DATE = context.args[0]
+    # try:
+    DATE = context.args[0]
 
-        if len(DATE) != 6:
-            await context.bot.send_message(chat_id=update.effective_chat.id, text='Date should be 6 numbers long -_-')
-            return
-        
-        # open username_ref as a dict
-        # username_ref matches the user's username to their rank + name printed in the parade state
-        with open('references\\username_ref.json') as username_ref_json:
-            username_ref_dict = load(username_ref_json)
+    if len(DATE) != 6:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text='Date should be 6 numbers long -_-')
+        return
+    
+    # open username_ref as a dict
+    # username_ref matches the user's username to their rank + name printed in the parade state
+    with open('references\\username_ref.json') as username_ref_json:
+        username_ref_dict = load(username_ref_json)
 
-        # load in all the stuff required to print parade state
-        load_ME_sheet(DATE)
-        update_adw(DATE)
-        categorise_ps()
+    # load in all the stuff required to print parade state
+    load_ME_sheet(DATE)
+    update_adw(DATE)
+    categorise_ps()
 
-        # sends the message
-        await context.bot.send_message(chat_id=update.effective_chat.id, text = f'{front_ps(DATE, username_ref_dict[update.message.from_user.username], "alpha")}'
+    # sends the message
+    await context.bot.send_message(chat_id=update.effective_chat.id, text = f'{front_ps(DATE, username_ref_dict[update.message.from_user.username], "alpha")}'
                                                                                 f'---------------------------------------------------\n\n'
                                                                                 f'{middle_ps(DATE, 5, 7, 5, "alpha")}'
                                                                                 f'---------------------------------------------------\n\n'
                                                                                 f'{end_ps(DATE)}')
     
-    except:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text='The bot is broken or you didnt type in a valid date (uh oh)')
-        await context.bot.send_message(chat_id=update.effective_chat.id, text='\U0001F613')
-        return
+    # except:
+    #     await context.bot.send_message(chat_id=update.effective_chat.id, text='The bot is broken or you didnt type in a valid date (uh oh)')
+    #     await context.bot.send_message(chat_id=update.effective_chat.id, text='\U0001F613')
+    #     return
 
 # /we [DATE]
 async def print_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE):
