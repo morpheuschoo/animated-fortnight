@@ -21,10 +21,10 @@ def csv_to_dataframe(month_num, year, thing):
 def download_adw_and_me():
     
     # remove all files from the ME and ADW folder
-    for file in os.scandir('online_sheets\ME'):
+    for file in os.scandir('online_sheets/ME'):
         os.remove(file)
 
-    for file in os.scandir('online_sheets\ADW'):
+    for file in os.scandir('online_sheets/ADW'):
         os.remove(file)
 
     # obtain the current month in numbers and alphabets
@@ -46,10 +46,10 @@ def download_adw_and_me():
         
         # downloads google sheets as csv from online and stores it in respective folders
         ME_df = csv_to_dataframe(month_num, year, 'ME')
-        ME_df.to_csv(f'online_sheets\ME\ME_{month_num}({year}).csv', index=False)  
+        ME_df.to_csv(f'online_sheets/ME/ME_{month_num}({year}).csv', index=False)  
 
         ADW_df = csv_to_dataframe(month_num, year, 'ADW')
-        ADW_df.to_csv(f'online_sheets\ADW\ADW_{month_num}({year}).csv', index=False)
+        ADW_df.to_csv(f'online_sheets/ADW/ADW_{month_num}({year}).csv', index=False)
 
 def open_sheet(DATE, thing):
     
@@ -63,13 +63,13 @@ def open_sheet(DATE, thing):
     # if sheet does not exist, download sheet from online and use it
     if thing == 'ME':
         try:
-            return pd.read_csv(f'online_sheets\ME\ME_{MONTH}({YEAR}).csv')
+            return pd.read_csv(f'online_sheets/ME/ME_{MONTH}({YEAR}).csv')
         except:
             return csv_to_dataframe(MONTH, YEAR, thing)
     
     if thing == 'ADW':
         try:
-            return pd.read_csv(f'online_sheets\ADW\ADW_{MONTH}({YEAR}).csv')
+            return pd.read_csv(f'online_sheets/ADW/ADW_{MONTH}({YEAR}).csv')
         except:
             return csv_to_dataframe(MONTH, YEAR, thing)
 
@@ -95,19 +95,19 @@ def load_ME_sheet(DATE):
     DAY = int(date_datetime.strftime('%#d'))
 
     # loading in all external files into code as a dictionary/list
-    with open('flight_personnel\ALPHA.json') as alpha_json:
+    with open('flight_personnel/ALPHA.json') as alpha_json:
         alpha_list = load(alpha_json)
 
-    with open('flight_personnel\BRAVO.json') as bravo_json:
+    with open('flight_personnel/BRAVO.json') as bravo_json:
         bravo_list = load(bravo_json)
 
-    with open('flight_personnel\OTHERS.json') as others_json:
+    with open('flight_personnel/OTHERS.json') as others_json:
         others_list = load(others_json)
 
-    with open('references\callsign_ref.json') as callsign_ref_json:
+    with open('references/callsign_ref.json') as callsign_ref_json:
         callsign_ref_dict = load(callsign_ref_json)
 
-    with open('references\\rank_sorting.json') as rank_sorting_json:
+    with open('references/rank_sorting.json') as rank_sorting_json:
         rank_sorting_dict = load(rank_sorting_json)
     
     # load in ME sheet
@@ -263,7 +263,7 @@ def update_adw(DATE):
     DAY = int(date_datetime.strftime('%#d'))
 
     # load in callsign_ref as a dictionary
-    with open('references\callsign_ref.json') as callsign_ref_json:
+    with open('references/callsign_ref.json') as callsign_ref_json:
         callsign_ref_dict = load(callsign_ref_json)
 
     # load in ADW sheet
@@ -314,10 +314,10 @@ def categorise_ps():
     global everyone_list
 
     # load in definite_status json and indefinite_status as a dictionary
-    with open('references\definite_status.json') as definite_status_json:
+    with open('references/definite_status.json') as definite_status_json:
         definite_status_list = load(definite_status_json)
     
-    with open('references\indefinite_status.json') as indefinite_status_json:
+    with open('references/indefinite_status.json') as indefinite_status_json:
         indefinite_status_dict = load(indefinite_status_json)
     
     # these statuses take precedence over other statuses
@@ -499,7 +499,7 @@ def duty_compiler(username, start_date, *args):
 
     # open username_ref as a dict
     # username_ref matches the user's username to their rank + name printed in the parade state
-    with open('references\\username_ref.json') as username_ref_json:
+    with open('references/username_ref.json') as username_ref_json:
         username_ref_dict = load(username_ref_json)
     
     # convert [DD][MM][YY] to datetime
