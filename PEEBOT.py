@@ -606,11 +606,11 @@ async def print_multiple_weekend_duty(update: Update, context: ContextTypes.DEFA
 
 if __name__ == '__main__':
     
-    load_dotenv()
+    # load_dotenv()
 
-    API_KEY = os.getenv('API_KEY')
+    # API_KEY = os.getenv('API_KEY')
 
-    bot = ApplicationBuilder().token(API_KEY).build()
+    bot = ApplicationBuilder().token('6005706881:AAENa--bPIik5iuk1ap1dAAlXVkBzKs-fM8').build()
 
     # /start
     bot.add_handler(CommandHandler('start', start))
