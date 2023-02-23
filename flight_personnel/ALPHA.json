@@ -30,6 +30,12 @@
   "NOR": "REGUALR"
  },
  {
+  "RANK": "2LT",
+  "DISPLAY_NAME": "WUI DUO",
+  "NAME_IN_PS": "WUI DUO",
+  "NOR": "REGULAR"
+ },
+ {
   "RANK": "LTA",
   "DISPLAY_NAME": "ZI YU",
   "NAME_IN_PS": "ZI YU",
