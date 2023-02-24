@@ -1,6 +1,6 @@
 import logging
-from telegram import Update
-from telegram.ext import filters, ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler
+from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram.ext import filters, ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, ConversationHandler
 from dotenv import load_dotenv
 from pee_maker import *
 
@@ -53,9 +53,15 @@ async def tor(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # /f [DATE]
 async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
-        DATE = context.args[0]
+        
+        # if no date inputted, next dat parade state is generated
+        if len(context.args) != 1:
+            DATE = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%d%m%y')
+        else:
+            DATE = context.args[0]
 
-        if len(DATE) != 6:
+        # ensures that date is numeric and is 6 numbers long
+        if not re.search('[0-9]{6}', DATE):
             await context.bot.send_message(chat_id=update.effective_chat.id, text='Date should be 6 numbers long -_-')
             return
         
@@ -92,7 +98,8 @@ async def print_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE)
     try:
         DATE = context.args[0]
 
-        if len(DATE) != 6:
+        # ensures that date is numeric and is 6 numbers long
+        if not re.search('[0-9]{6}', DATE):
             await context.bot.send_message(chat_id=update.effective_chat.id, text='Date should be 6 numbers long -_-')
             return
 
@@ -105,20 +112,21 @@ async def print_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 # /duty [START DATE] [END DATE]
 async def print_multiple_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    try:
-        start_date = context.args[0]
-        end_date = context.args[1]
-        
-        if len(start_date) != 6 or len(end_date) != 6:
-            await context.bot.send_message(chat_id=update.effective_chat.id, text='Date should be 6 numbers long -_-')
-            return
-
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=f'{duty_compiler(update.message.from_user.username, start_date, end_date)}')
+    # try:
+    start_date = context.args[0]
+    end_date = context.args[1]
     
-    except:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text='The bot is broken or you didnt type in valid dates (uh oh)')
-        await context.bot.send_message(chat_id=update.effective_chat.id, text='\U0001F613')
+    # ensures that both dates are numeric and are 6 numbers long
+    if not re.search('[0-9]{6}', start_date) or not re.search('[0-9]{6}', end_date):
+        await context.bot.send_message(chat_id=update.effective_chat.id, text='Dates should be 6 numbers long -_-')
         return
+
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=f'{duty_compiler(update.message.from_user.username, start_date, end_date)}')
+    
+    # except:
+    #     await context.bot.send_message(chat_id=update.effective_chat.id, text='The bot is broken or you didnt type in valid dates (uh oh)')
+    #     await context.bot.send_message(chat_id=update.effective_chat.id, text='\U0001F613')
+    #     return
     
 # /ol
 async def print_override_ps_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -152,9 +160,124 @@ async def print_override_ps_list(update: Update, context: ContextTypes.DEFAULT_T
     except:
         await context.bot.send_message(chat_id=update.effective_chat.id, text='Override list is empty')
 
-# /oa
-async def override_ps_add(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    poo
+# ***DICTIONARY FOR /oa***
+temp_override_ps_dict = dict.fromkeys(['NAME_IN_PS', 'STATUS_IN_PS', 'START_DATE', 'END_DATE'])
+
+# /oa [1st] - asks for NAME
+async def override_ps_add_start(update: Update, context: ContextTypes.DEFAULT_TYPE): 
+    
+    # load in ALPHA flight as a list
+    with open('flight_personnel/ALPHA.json') as alpha_json:
+        alpha_list = load(alpha_json)
+    
+    keyboard = []
+        
+    # make the keyboard such that one row has only one name
+    # format: [[NAME(1)], [NAME(2)], [NAME(3)], ...]
+    for x in alpha_list:
+        keyboard.append([x['RANK'] + ' ' + x['DISPLAY_NAME'] if x['RANK'] != 'NIL' else x['DISPLAY_NAME']])
+
+    await context.bot.send_message(chat_id=update.effective_chat.id,
+                                   text='Select a personnel\n'
+                                        '/exit to exit',
+                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Choose personnel'))
+
+    return 1
+
+# /oa [2nd] - saves NAME and asks for STATUS
+async def override_ps_add_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    
+    # load in ALPHA flight as a list
+    everyone_list = load_163()
+    
+    # obtains the display name from reply
+    DISPLAY_NAME = update.message.text if len(update.message.text.split()) == 1 else update.message.text[4:]
+
+    # obtains and saves the name in parade state of the respective personnel
+    for x in everyone_list:
+        if x['DISPLAY_NAME'] == DISPLAY_NAME:
+            temp_override_ps_dict['NAME_IN_PS'] = x['NAME_IN_PS']
+            break
+
+    keyboard = [['MC', 'OSL', 'OFF'], ['LL', 'MA', 'RSO'], ['CCL', 'PCL', 'HL'], ['UL', 'CL', 'FFI']]
+
+    await context.bot.send_message(chat_id=update.effective_chat.id, 
+                                   text='Select a status\n'
+                                        'For custom statuses, type using the keyboard\n'
+                                        '/exit to exit', 
+                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Select status'))
+
+    return 2
+
+# /oa [3rd] - saves STATUS and asks for START DATE to END DATE
+async def override_ps_add_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    
+    # saves the status, clearing up any input error
+    # (eg. trailing, leading whitespaces or whitespaces beside '/')
+    temp_override_ps_dict['STATUS_IN_PS'] = re.sub('\s*/\s*', '/', update.message.text.upper().strip())
+    
+    await context.bot.send_message(chat_id=update.effective_chat.id, 
+                                   text='Input: [START_DATE] [END_DATE]\n'
+                                        '/exit to exit',
+                                   reply_markup=ReplyKeyboardRemove())
+    
+    return 3
+
+# /oa [4th] - saves START DATE to END DATE
+async def override_ps_add_date(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+    
+        # ensures that there are 2 dates, both dates are numeric and are 6 numbers long
+        if not re.search('[0-9]{6} [0-9]{6}', update.message.text):
+            await context.bot.send_message(chat_id=update.effective_chat.id,
+                                           text='Dates invalid\n'
+                                                '/exit to exit')
+            return 3
+        
+        # saves start and end date
+        start_date = update.message.text.split()[0]
+        end_date = update.message.text.split()[1]
+        
+        # ensures that the start date is before the end date
+        if datetime_convert(start_date) > datetime_convert(end_date):
+            await context.bot.send_message(chat_id=update.effective_chat.id,
+                                           text='Start date > End date\n'
+                                                'bruh moment')
+            return 3
+        
+        temp_override_ps_dict['START_DATE'], temp_override_ps_dict['END_DATE'] = start_date, end_date
+
+        # adds the user inputted details into the override_ps file
+        with open('override/override_ps.json') as override_ps_json:
+            override_ps_list = load(override_ps_json)
+        
+        override_ps_list.append(temp_override_ps_dict)
+
+        with open('override/override_ps.json', 'w') as override_ps_json:
+            dump(override_ps_list, override_ps_json, indent=1)
+
+        await context.bot.send_message(chat_id=update.effective_chat.id, 
+                                    text='Status added successfully! Use /ol to view full override list')
+
+        return ConversationHandler.END
+    
+    # this except catches dates that are not valid dates
+    # (eg 100000)
+    except:
+        await context.bot.send_message(chat_id=update.effective_chat.id,
+                                       text='Dates invalid\n'
+                                            '/exit to exit')
+        
+        return 3
+
+
+# /oa [EXIT] - when users want to exit out of page
+async def override_ps_add_exit(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message(chat_id=update.effective_chat.id, 
+                                   text='Exit ok \U0001F44D',
+                                   reply_markup=ReplyKeyboardRemove())
+    
+    return ConversationHandler.END
 
 if __name__ == '__main__':
     
@@ -185,5 +308,18 @@ if __name__ == '__main__':
 
     # /ol
     bot.add_handler(CommandHandler('ol', print_override_ps_list))
+
+    # /oa
+    override_ps_add_handler = ConversationHandler(
+        entry_points=[CommandHandler('oa', override_ps_add_start)],
+        states={
+            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, override_ps_add_name)],
+            2: [MessageHandler(filters.TEXT & ~filters.COMMAND, override_ps_add_status)],
+            3: [MessageHandler(filters.TEXT & ~filters.COMMAND, override_ps_add_date)]
+        },
+        fallbacks=[CommandHandler('exit', override_ps_add_exit)]
+    )
+
+    bot.add_handler(override_ps_add_handler)
     
     bot.run_polling()
