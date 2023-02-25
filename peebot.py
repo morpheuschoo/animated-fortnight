@@ -191,8 +191,6 @@ async def override_ps_add_start(update: Update, context: ContextTypes.DEFAULT_TY
 
 # /oa [2nd] - saves NAME and asks for STATUS
 async def override_ps_add_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    
-    # load in ALPHA flight as a list
     everyone_list = load_163()
     
     # obtains the display name from reply
@@ -275,9 +273,23 @@ async def override_ps_add_date(update: Update, context: ContextTypes.DEFAULT_TYP
         
         return 3
 
+# # /or [1st] - asks for NAME
+# async def override_ps_remove_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+#     everyone_list = load_163()
 
-# /oa [EXIT] - when users want to exit out of page
-async def override_ps_add_exit(update: Update, context: ContextTypes.DEFAULT_TYPE):
+#     with open('override/overrie_ps.json') as override_ps_json:
+#         override_ps_list = load(override_ps_json)
+    
+#     override_ps_set_ran = set()
+
+#     for x in everyone_list:
+#         for y in override_ps_list:
+#             if x['NAME_IN_PS'] == y['NAME_IN_PS']:
+#                 override_ps_set_ran.add(x['RANK'] + ' ' + x['DISPLAY_NAME'] if x['RANK'] != 'NIL' else x['DISPLAY_NAME'])
+
+
+# MISC [EXIT] - when users want to exit out of page
+async def exit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, 
                                    text='Exit ok \U0001F44D',
                                    reply_markup=ReplyKeyboardRemove())
@@ -322,7 +334,7 @@ if __name__ == '__main__':
             2: [MessageHandler(filters.TEXT & ~filters.COMMAND, override_ps_add_status)],
             3: [MessageHandler(filters.TEXT & ~filters.COMMAND, override_ps_add_date)]
         },
-        fallbacks=[CommandHandler('exit', override_ps_add_exit)]
+        fallbacks=[CommandHandler('exit', exit)]
     )
 
     bot.add_handler(override_ps_add_handler)
