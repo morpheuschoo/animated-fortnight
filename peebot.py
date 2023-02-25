@@ -54,7 +54,7 @@ async def tor(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         
-        # if no date inputted, next dat parade state is generated
+        # if no date inputted, next day parade state is generated
         if len(context.args) != 1:
             DATE = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%d%m%y')
         else:
@@ -96,7 +96,12 @@ async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # /we [DATE]
 async def print_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
-        DATE = context.args[0]
+        
+        # if no date inputted, next day parade state is generated
+        if len(context.args) != 1:
+            DATE = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%d%m%y')
+        else:
+            DATE = context.args[0]
 
         # ensures that date is numeric and is 6 numbers long
         if not re.search('[0-9]{6}', DATE):
@@ -112,21 +117,21 @@ async def print_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 # /duty [START DATE] [END DATE]
 async def print_multiple_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # try:
-    start_date = context.args[0]
-    end_date = context.args[1]
-    
-    # ensures that both dates are numeric and are 6 numbers long
-    if not re.search('[0-9]{6}', start_date) or not re.search('[0-9]{6}', end_date):
-        await context.bot.send_message(chat_id=update.effective_chat.id, text='Dates should be 6 numbers long -_-')
-        return
+    try:
+        start_date = context.args[0]
+        end_date = context.args[1]
+        
+        # ensures that both dates are numeric and are 6 numbers long
+        if not re.search('[0-9]{6}', start_date) or not re.search('[0-9]{6}', end_date):
+            await context.bot.send_message(chat_id=update.effective_chat.id, text='Dates should be 6 numbers long -_-')
+            return
 
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=f'{duty_compiler(update.message.from_user.username, start_date, end_date)}')
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=f'{duty_compiler(update.message.from_user.username, start_date, end_date)}')
     
-    # except:
-    #     await context.bot.send_message(chat_id=update.effective_chat.id, text='The bot is broken or you didnt type in valid dates (uh oh)')
-    #     await context.bot.send_message(chat_id=update.effective_chat.id, text='\U0001F613')
-    #     return
+    except:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text='The bot is broken or you didnt type in valid dates (uh oh)')
+        await context.bot.send_message(chat_id=update.effective_chat.id, text='\U0001F613')
+        return
     
 # /ol
 async def print_override_ps_list(update: Update, context: ContextTypes.DEFAULT_TYPE):

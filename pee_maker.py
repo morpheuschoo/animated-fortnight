@@ -152,77 +152,56 @@ def load_standby_and_duty():
     
         return temp_list
     
-    # declare a duty list that contains the rank and name of personnel
-    duty_list_ran = []
-    
+    # each role(key) corresponds to the min(value[0]) and max(value[1])
+    duty_list_ran_ref = {
+        0: [9, 12],
+        1: [5, 9],
+        2: [2, 9],
+        3: [2, 9],
+        4: [1, 3],
+        5: [1, 3]
+    }
+
     # sort personnel on duty by rank
     duty_list = sort_by_rank([x for x in everyone_list if x['STATUS_IN_PS'] == 'X'])
 
+    # declare a duty list that contains the rank and name of personnel
+    # fill list with 6 UNKNOWN which ensures that the length of the list is excatly 6
+    duty_list_ran = ['UNKNOWN' for x in range(6)]
+
     # placing rank and name into duty list
     # ensures that role and rank match
-    count = 0
-    for x in duty_list:
-        successful = False
-        while not successful:
-            if x['RANK_SORT'] in range(9, 12) and count == 0:
-                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
-                count += 1
-                successful = True
-            elif x['RANK_SORT'] >= 5 and count == 1:
-                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
-                count += 1
-                successful = True
-            elif x['RANK_SORT'] in range(2, 9) and count == 2:
-                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
-                count += 1
-                successful = True
-            elif x['RANK_SORT'] in range(2, 9) and count == 3:
-                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
-                count += 1
-                successful = True
-            elif x['RANK_SORT'] in range(1, 3) and count == 4:
-                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
-                count += 1
-                successful = True
-            elif x['RANK_SORT'] in range(1, 3) and count == 5:
-                duty_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
-                count += 1
-                successful = True
-            elif count == 6:
-                break
-            else:
-                duty_list_ran.append('UNKNOWN')
-                count += 1
+    i = 0
+    check = []
+    for j in range(6):
+        if duty_list[i]['RANK_SORT'] in range(duty_list_ran_ref[j][0], duty_list_ran_ref[j][1]) and not duty_list[i]['NAME_IN_PS'] in check:
+            duty_list_ran[j] = f'{duty_list[i]["RANK"]} {duty_list[i]["DISPLAY_NAME"]}'
+            check.append(duty_list[i]['NAME_IN_PS'])
+            i += 1 if i < len(duty_list) - 1 else 0
     
-    # declare a duty list that contains the rank and name of personnel
-    standby_list_ran = []
+    # each role(key) corresponds to the min(value[0]) rank and max(value[1]) rank
+    standby_list_ran_ref = {
+        0: [9, 12],
+        1: [2, 9],
+        2: [1, 3]
+    }
 
     # sort personnel on standby by rank
     standby_list = sort_by_rank([x for x in everyone_list if 'SB' in x['STATUS_IN_PS']])
+
+    # declare a standby list that contains the rank and name of personnel
+    # fill list with 3 UNKNOWN which ensures that the length of the list is exactly 3
+    standby_list_ran = ['UNKNOWN' for x in range(3)]
         
-    # placing rank and name into standby list
+    # placing rank and name into duty list
     # ensures that role and rank match
-    count = 0
-    for x in standby_list:
-        successful = False
-        while not successful:
-            if x['RANK_SORT'] in range(9, 12) and count == 0:
-                standby_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
-                count += 1
-                successful = True
-            elif x['RANK_SORT'] in range(2, 9) and count == 1:
-                standby_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
-                count += 1
-                successful = True
-            elif x['RANK_SORT'] in range(1, 3) and count == 2:
-                standby_list_ran.append(f'{x["RANK"]} {x["DISPLAY_NAME"]}')
-                count += 1
-                successful = True
-            elif count == 3:
-                break
-            else:
-                standby_list_ran.append('UNKNOWN')
-                count += 1
+    i = 0
+    check = []
+    for j in range(3):
+        if standby_list[i]['RANK_SORT'] in range(standby_list_ran_ref[j][0], standby_list_ran_ref[j][1]) and not standby_list[i]['NAME_IN_PS'] in check:
+            standby_list_ran[j] = f'{standby_list[i]["RANK"]} {standby_list[i]["DISPLAY_NAME"]}'
+            check.append(standby_list[i]['NAME_IN_PS'])
+            i += 1 if i < len(standby_list) - 1 else 0
 
     return duty_list_ran, standby_list_ran
 
