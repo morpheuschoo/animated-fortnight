@@ -1,8 +1,10 @@
 import logging
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import filters, ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, ConversationHandler
-from dotenv import load_dotenv
 from pee_maker import *
+from pee_scheduler import download_adw_and_me
+from pytz import timezone
+from dotenv import load_dotenv
 
 # tells you when the programme starts / stops (in console)
 logging.basicConfig(
@@ -55,8 +57,9 @@ async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         
         # if no date inputted, next day parade state is generated
+        # in Singapore timezone
         if len(context.args) != 1:
-            DATE = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%d%m%y')
+            DATE = (datetime.datetime.now(timezone('Asia/Singapore')) + datetime.timedelta(days=1)).strftime('%d%m%y')
         else:
             DATE = context.args[0]
 
@@ -98,8 +101,9 @@ async def print_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE)
     try:
         
         # if no date inputted, next day parade state is generated
+        # in Singapore timezone
         if len(context.args) != 1:
-            DATE = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%d%m%y')
+            DATE = (datetime.datetime.now(timezone('Asia/Singapore')) + datetime.timedelta(days=1)).strftime('%d%m%y')
         else:
             DATE = context.args[0]
 
@@ -304,6 +308,11 @@ if __name__ == '__main__':
 
     # pee bot maker
     bot = ApplicationBuilder().token(API_KEY).build()
+
+    # pee scheduler
+    # updates the online sheets every 15 MINUTES
+    # <<< from 10am to 5pm >>>
+    update_online_sheets = bot.job_queue.run_repeating(load_ME_sheet, datetime.timedelta(minutes=15), datetime.time(2, 0), datetime.time(9, 0))
 
     # /start
     bot.add_handler(CommandHandler('start', start))

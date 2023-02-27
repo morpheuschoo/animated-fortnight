@@ -2,7 +2,7 @@ import os
 import datetime
 from pee_maker import csv_to_dataframe
 
-def download_adw_and_me():
+async def download_adw_and_me():
     
     # remove all files from the ME and ADW folder
     for file in os.scandir('online_sheets/ME'):
@@ -34,3 +34,5 @@ def download_adw_and_me():
 
         ADW_df = csv_to_dataframe(month_num, year, 'ADW')
         ADW_df.to_csv(f'online_sheets/ADW/ADW_{month_num}({year}).csv', index=False)
+
+# add something to update override_ps (remove outdated statuses)
