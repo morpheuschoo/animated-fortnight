@@ -41,7 +41,7 @@ def download_adw_and_me():
     with open('status.json') as status_json:
         status_dict = load(status_json)
 
-    status_dict['online_sheets'] = datetime.datetime.now(timezone('Asia/Singapore')).strftime('Updated as of %d/%m/%y at %#I:%M %p')
+    status_dict['ONLINE SHEETS'] = datetime.datetime.now(timezone('Asia/Singapore')).strftime('Updated as of %d/%m/%y at %#I:%M %p')
 
     with open('status.json', 'w') as status_json:
         dump(status_dict, status_json, indent=1)

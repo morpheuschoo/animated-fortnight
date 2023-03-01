@@ -53,6 +53,21 @@ async def tor(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                    text='FOR literally everything else:\n\n'
                                         'https://docs.google.com/file/d/1rXLXxWMSpb8hU_BRuI87jv7wS04tB6yD/edit?usp=docslist_api')
 
+# /status
+async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    with open('status.json') as status_json:
+        status_dict = load(status_json)
+    
+    status_string = '<<< Statuses >>>\n\n'
+
+    # combine all statuses into one string to be reutrned
+    for x in status_dict:
+        status_string += f'{x}:\n{status_dict[x]}\n\n'
+    
+
+    await context.bot.send_message(chat_id=update.effective_chat.id,
+                                   text=status_string)
+
 # /update
 async def update_all(update: Update, context: ContextTypes.DEFAULT_TYPE):
     download_adw_and_me()
@@ -164,7 +179,7 @@ async def print_override_ps_list(update: Update, context: ContextTypes.DEFAULT_T
                     
                     combined[x['NAME_IN_PS']].append(f'{x["START_DATE"]} to {x["END_DATE"]} ({x["STATUS_IN_PS"]})')
 
-        print_combined = f'<<<OVERRIDE LIST>>>\n\n'
+        print_combined = f'<<< Override list >>>\n\n'
 
         for x in combined.values():
             print_combined += f'{x[0]}:\n' + '\n'.join(x[1:]) + '\n\n'
@@ -328,6 +343,9 @@ if __name__ == '__main__':
     # /tor
     bot.add_handler(CommandHandler('tor', tor))
     
+    # /status
+    bot.add_handler(CommandHandler('status', status))
+
     # /update
     bot.add_handler(CommandHandler('update', update_all))
 
