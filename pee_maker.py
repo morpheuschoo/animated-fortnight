@@ -1,5 +1,5 @@
 import pandas as pd
-from ujson import load, dump
+from ujson import load
 import datetime
 import re
 import os
