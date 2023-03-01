@@ -1,4 +1,4 @@
 .env
-LAME.py
 POOBOT.ipynb
 __pycache__/
+.gitignore

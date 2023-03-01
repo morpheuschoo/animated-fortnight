@@ -1,8 +1,10 @@
 import os
 import datetime
+from ujson import load, dump
+from pytz import timezone
 from pee_maker import csv_to_dataframe
 
-async def download_adw_and_me():
+def download_adw_and_me():
     
     # remove all files from the ME and ADW folder
     for file in os.scandir('online_sheets/ME'):
@@ -34,5 +36,14 @@ async def download_adw_and_me():
 
         ADW_df = csv_to_dataframe(month_num, year, 'ADW')
         ADW_df.to_csv(f'online_sheets/ADW/ADW_{month_num}({year}).csv', index=False)
+
+    # updating status file with date and time which online sheets were updated
+    with open('status.json') as status_json:
+        status_dict = load(status_json)
+
+    status_dict['online_sheets'] = datetime.datetime.now(timezone('Asia/Singapore')).strftime('Updated as of %d/%m/%y at %#I:%M %p')
+
+    with open('status.json', 'w') as status_json:
+        dump(status_dict, status_json, indent=1)
 
 # add something to update override_ps (remove outdated statuses)

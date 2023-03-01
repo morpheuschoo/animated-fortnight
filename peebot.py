@@ -3,6 +3,7 @@ from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import filters, ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, ConversationHandler
 from pee_maker import *
 from pee_scheduler import download_adw_and_me
+from ujson import dump
 from pytz import timezone
 from dotenv import load_dotenv
 
@@ -51,6 +52,10 @@ async def tor(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id,
                                    text='FOR literally everything else:\n\n'
                                         'https://docs.google.com/file/d/1rXLXxWMSpb8hU_BRuI87jv7wS04tB6yD/edit?usp=docslist_api')
+
+# /update
+async def update_all(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    download_adw_and_me()
 
 # /f [DATE]
 async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -322,6 +327,9 @@ if __name__ == '__main__':
 
     # /tor
     bot.add_handler(CommandHandler('tor', tor))
+    
+    # /update
+    bot.add_handler(CommandHandler('update', update_all))
 
     # /f [DATE]
     bot.add_handler(CommandHandler('f', print_ps))
