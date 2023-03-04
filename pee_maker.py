@@ -124,7 +124,7 @@ def load_ME_sheet(DATE):
     # leading and trailing whitespaces removed from name and status
     # if / present leading and trailing whitespaces also removed
     for x in range(9, len(ME_df) - 33):
-        if ME_df.iloc[x, 0] != 'NIL' and x != 60:
+        if ME_df.iloc[x, 0] != 'NIL':
             update('NAME_IN_PS', ME_df.iloc[x, 0].upper().strip(), 'STATUS_IN_PS', re.sub('\s*/\s*', '/', ME_df.iloc[x, DAY].upper().strip()))
     
     # function that does the override

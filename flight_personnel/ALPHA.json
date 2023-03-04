@@ -3,43 +3,43 @@
   "RANK": "NIL",
   "DISPLAY_NAME": "OC",
   "NAME_IN_PS": "OC",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "CPT",
   "DISPLAY_NAME": "MARCUS",
   "NAME_IN_PS": "MARCUS",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "CPT",
   "DISPLAY_NAME": "WEI KEONG",
   "NAME_IN_PS": "WEI KEONG",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "CPT",
   "DISPLAY_NAME": "MARC",
   "NAME_IN_PS": "MARC",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "LTA",
   "DISPLAY_NAME": "CHU HENG",
   "NAME_IN_PS": "CHU HENG",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
+ },
+ {
+    "RANK": "LTA",
+    "DISPLAY_NAME": "WUI DUO",
+    "NAME_IN_PS": "WUI DUO",
+    "NOR": "REGULAR"
  },
  {
   "RANK": "LTA",
   "DISPLAY_NAME": "ZI YU",
   "NAME_IN_PS": "ZI YU",
   "NOR": "NSF"
- },
- {
-  "RANK": "2LT",
-  "DISPLAY_NAME": "WUI DUO",
-  "NAME_IN_PS": "WUI DUO",
-  "NOR": "REGULAR"
  },
  {
   "RANK": "2LT",
@@ -57,73 +57,73 @@
   "RANK": "2WO",
   "DISPLAY_NAME": "SARA",
   "NAME_IN_PS": "(SUP) SARA",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "3WO",
   "DISPLAY_NAME": "ZHENG YUAN",
   "NAME_IN_PS": "(SUP) ZHENG YUAN",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "3WO",
   "DISPLAY_NAME": "HUA ZONG",
   "NAME_IN_PS": "(SUP) HUA ZONG",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "3WO",
   "DISPLAY_NAME": "YAO REN",
   "NAME_IN_PS": "(SUP) YAO REN",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "MSG",
   "DISPLAY_NAME": "MANFRED",
   "NAME_IN_PS": "(SUP) MANFRED",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "MSG",
   "DISPLAY_NAME": "KIT YIN",
   "NAME_IN_PS": "(CRANE) KIT YIN",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "MSG",
   "DISPLAY_NAME": "YI HAO",
   "NAME_IN_PS": "(SUP) YI HAO",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "1SG",
   "DISPLAY_NAME": "VINCZE",
   "NAME_IN_PS": "(CRANE) VINCZE",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "1SG",
   "DISPLAY_NAME": "SUREN",
   "NAME_IN_PS": "(RIGG) SURENDREN",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "2SG",
   "DISPLAY_NAME": "HE QUN",
   "NAME_IN_PS": "(CRANE) HE QUN",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
   "RANK": "2SG",
   "DISPLAY_NAME": "MALCOLM CHOW",
   "NAME_IN_PS": "(RIGG) MALCOLM",
-  "NOR": "REGUALR"
+  "NOR": "REGULAR"
  },
  {
-  "RANK": "2SG",
-  "DISPLAY_NAME": "BRYAN",
-  "NAME_IN_PS": "BRYAN LEE",
-  "NOR": "REGUALR"
+    "RANK": "2SG",
+    "DISPLAY_NAME": "BRYAN",
+    "NAME_IN_PS": "(RIGG) BRYAN LEE",
+    "NOR": "REGULAR"
  },
  {
   "RANK": "2SG",
