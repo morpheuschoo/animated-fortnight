@@ -2,7 +2,8 @@ import logging
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import filters, ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, ConversationHandler
 from pee_maker import *
-from pee_scheduler import download_adw_and_me
+from pee_scheduler import download_adw_and_me, obtain_merged_cells
+import os
 from ujson import dump
 from pytz import timezone
 from dotenv import load_dotenv
@@ -13,11 +14,11 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-# /start
+# ------------------------------------------------/START------------------------------------------------
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="/help - tells you what the bot can do")
 
-# /help
+# ------------------------------------------------/HELP------------------------------------------------
 async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text='NOTE: [DATE] will be in [DD][MM][YY] format\n'
                                                                           '(eg 20th Jan 2023 will be written as 200123)\n')
@@ -27,18 +28,23 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                         'TERMS OF REFERENCE:\n'
                                         '/tor - gives you the places where the bot takes information from\n\n'
                                         'PARADE STATE / DUTY COMMANDS:\n'
-                                        '/f [DATE] - generates the parade state for that date\n'
-                                        '/we [DATE] - generates the duty crew for the weekend\n'
+                                        '/f [DATE] - generates the parade state\n'
+                                        '/we [DATE] - generates the duty crew\n'
                                         '(DATE should be a Saturday)\n'
-                                        '/duty [START DATE] [END DATE] - generates the duty crew from the start date to the end date inclusive\n'
-                                        '(used for things such as consecutive public holidays)\n\n'
+                                        '/duty [START DATE] [END DATE] - generates the duty crew from the start date to the end date inclusive\n\n'
                                         'OVERRIDE STATUS COMMANDS:\n'
-                                        '(for things like MC/COURSES for multiple days that is not registered by the bot)\n'
-                                        '/ol - list of personnel that are overridden\n'
-                                        '/oa - add personnel such that a certain status is reflected from the start date to end date inclusive\n'
-                                        '/or - remove personnel status from override list')
+                                        '(for things like MC)\n'
+                                        '/ol - shows override list\n'
+                                        '/oa - add to override list\n'
+                                        '/or - remove from override list\n\n'
+                                        'EDIT PERSONNEL:\n'
+                                        '/ep - edit personnel file\n\n'
+                                        'ADMIN COMMANDS:\n'
+                                        '/status - shows when was data last updated\n'
+                                        '/update - updates the database\n'
+                                        '/obtainfiles - obtain personnel file')
 
-# /tor
+# ------------------------------------------------/TOR------------------------------------------------
 async def tor(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id,
                                    text='FOR TO:\n'
@@ -51,28 +57,60 @@ async def tor(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await context.bot.send_message(chat_id=update.effective_chat.id,
                                    text='FOR literally everything else:\n\n'
-                                        'https://docs.google.com/file/d/1rXLXxWMSpb8hU_BRuI87jv7wS04tB6yD/edit?usp=docslist_api')
+                                        'https://docs.google.com/spreadsheets/d/1rXLXxWMSpb8hU_BRuI87jv7wS04tB6yD')
 
-# /status
-async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+# ------------------------------------------------MAKES THE STRING TO BE USED IN /STATUS and /UPDATE------------------------------------------------
+def print_status_string():
     with open('status.json') as status_json:
         status_dict = load(status_json)
     
-    status_string = '<<< Statuses >>>\n\n'
+    status_string = '<<< STATUSES >>>\n\n'
 
     # combine all statuses into one string to be reutrned
-    for x in status_dict:
-        status_string += f'{x}:\n{status_dict[x]}\n\n'
+    status_string += f'ONLINE SHEETS:\nUPDATED AS OF {status_dict["ONLINE SHEETS"]}\n\n'
     
+    status_string += f'MERGED CELLS:\n'
 
-    await context.bot.send_message(chat_id=update.effective_chat.id,
-                                   text=status_string)
+    if status_dict['MERGED CELLS'][1] == 'continue':
+        status_string += f'UPDATED AS OF {status_dict["MERGED CELLS"][0]}\n\n'
+    else:
+        status_string += f'STOPPED UPDATING AS OF {status_dict["MERGED CELLS"][0]}\n\n' 
+    
+    return status_string
 
-# /update
+# ------------------------------------------------/STATUS------------------------------------------------
+async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=print_status_string())
+
+# ------------------------------------------------/UPDATE------------------------------------------------
 async def update_all(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    download_adw_and_me()
+    await context.bot.send_message(chat_id=update.effective_chat.id, text='Updating...')
 
-# /f [DATE]
+    download_adw_and_me()
+    obtain_merged_cells()
+
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=print_status_string())
+
+# ------------------------------------------------/OBTAINFILES------------------------------------------------
+# /OBTAINFILES [1st] - asks for FLUGHT
+async def obtain_files_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    keyboard = [['ALPHA'], ['BRAVO'], ['OTHERS']]
+    
+    await context.bot.send_message(chat_id=update.effective_chat.id, 
+                                   text='Select flight\n'
+                                        '/exit to exit', 
+                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Flight'))
+    return 1
+
+# /OBTAIN FILES [2nd] - returns respective file
+async def obtain_files_flight(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_document(update.effective_chat.id,
+                                    open(f'flight_personnel/{update.message.text}.json', 'rb'),
+                                    reply_markup=ReplyKeyboardRemove())
+
+    return ConversationHandler.END
+
+# ------------------------------------------------/f [DATE]------------------------------------------------
 async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         
@@ -116,7 +154,7 @@ async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=update.effective_chat.id, text='\U0001F613')
         return
 
-# /we [DATE]
+# ------------------------------------------------/WE [DATE]------------------------------------------------
 async def print_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         
@@ -139,7 +177,7 @@ async def print_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE)
         await context.bot.send_message(chat_id=update.effective_chat.id, text='\U0001F613')
         return
 
-# /duty [START DATE] [END DATE]
+# ------------------------------------------------/DUTY [START DATE] [END DATE]------------------------------------------------
 async def print_multiple_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         start_date = context.args[0]
@@ -159,19 +197,27 @@ async def print_multiple_weekend_duty(update: Update, context: ContextTypes.DEFA
     
 # /ol
 async def print_override_ps_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    try:
-        with open('override/override_ps.json') as override_ps_json:
-            override_ps_list = load(override_ps_json)
-        
-        everyone_list = load_163()
+    with open('override/merged_cells.json') as merged_cells_json:
+        merged_cells_list = load(merged_cells_json)
 
+    with open('override/override_ps.json') as override_ps_json:
+        override_ps_list = load(override_ps_json)
+    
+    with open('status.json') as status_json:
+        status_dict = load(status_json)
+    
+    everyone_list = load_163()
+
+    # formats statuses together with rank + display name for printing
+    def print_combined_list(list_in_question):
         combined = {}
+        print_combined = ''
 
         # iterrates through the override ps list
         # creates a dictionary:
         # KEY: name in parade state
         # VALUE: [0]-rank + displayed name / [1 and above]-status with start date and end date
-        for x in override_ps_list:
+        for x in list_in_question:
             for y in everyone_list:
                 if x['NAME_IN_PS'] == y['NAME_IN_PS']:
                     if x['NAME_IN_PS'] not in combined:
@@ -179,17 +225,26 @@ async def print_override_ps_list(update: Update, context: ContextTypes.DEFAULT_T
                     
                     combined[x['NAME_IN_PS']].append(f'{x["START_DATE"]} to {x["END_DATE"]} ({x["STATUS_IN_PS"]})')
 
-        print_combined = f'<<< Override list >>>\n\n'
-
         for x in combined.values():
             print_combined += f'{x[0]}:\n' + '\n'.join(x[1:]) + '\n\n'
 
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=print_combined)
-            
-    except:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text='Override list is empty')
+        return print_combined
+    
+    print_merged_cells_combined =  '<<< MERGED CELLS >>>\n'
 
-# ***DICTIONARY FOR /oa***
+    if status_dict['MERGED CELLS'][1] == 'continue':
+        print_merged_cells_combined += f'UPDATED AS OF {status_dict["MERGED CELLS"][0]}\n\n'
+    else:
+        print_merged_cells_combined += f'STOPPED UPDATING AS OF {status_dict["MERGED CELLS"][0]}\n\n'
+    
+    print_merged_cells_combined += print_combined_list(merged_cells_list)
+
+    print_override_ps_combined = '<<< OVERRIDE LIST >>>\n\n' + print_combined_list(override_ps_list)
+
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=print_merged_cells_combined)
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=print_override_ps_combined)
+
+# ------------------------------------------------/OA------------------------------------------------
 temp_override_ps_dict = dict.fromkeys(['NAME_IN_PS', 'STATUS_IN_PS', 'START_DATE', 'END_DATE'])
 
 # /oa [1st] - asks for NAME
@@ -209,7 +264,7 @@ async def override_ps_add_start(update: Update, context: ContextTypes.DEFAULT_TY
     await context.bot.send_message(chat_id=update.effective_chat.id,
                                    text='Select a personnel\n'
                                         '/exit to exit',
-                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Choose personnel'))
+                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Personnel'))
 
     return 1
 
@@ -232,7 +287,7 @@ async def override_ps_add_name(update: Update, context: ContextTypes.DEFAULT_TYP
                                    text='Select a status\n'
                                         'For custom statuses, type using the keyboard\n'
                                         '/exit to exit', 
-                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Select status'))
+                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Status'))
 
     return 2
 
@@ -244,7 +299,7 @@ async def override_ps_add_status(update: Update, context: ContextTypes.DEFAULT_T
     temp_override_ps_dict['STATUS_IN_PS'] = re.sub('\s*/\s*', '/', update.message.text.upper().strip())
     
     await context.bot.send_message(chat_id=update.effective_chat.id, 
-                                   text='Input: [START_DATE] [END_DATE]\n'
+                                   text='Input: [START DATE] [END DATE]\n'
                                         '/exit to exit',
                                    reply_markup=ReplyKeyboardRemove())
     
@@ -284,7 +339,7 @@ async def override_ps_add_date(update: Update, context: ContextTypes.DEFAULT_TYP
             dump(override_ps_list, override_ps_json, indent=1)
 
         await context.bot.send_message(chat_id=update.effective_chat.id, 
-                                    text='Status added successfully! Use /ol to view full override list')
+                                       text='Status added successfully! Use /ol to view full override list')
 
         return ConversationHandler.END
     
@@ -297,20 +352,98 @@ async def override_ps_add_date(update: Update, context: ContextTypes.DEFAULT_TYP
         
         return 3
 
-# # /or [1st] - asks for NAME
-# async def override_ps_remove_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-#     everyone_list = load_163()
+# ------------------------------------------------/EP------------------------------------------------
+temp_edit_personnel_dict = dict.fromkeys(['FLIGHT', 'NAME_IN_PS', 'FIELD'])
 
-#     with open('override/overrie_ps.json') as override_ps_json:
-#         override_ps_list = load(override_ps_json)
+# /ep [1st] - asks for FLIGHT
+async def edit_personnel_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    keyboard = [['ALPHA'], ['BRAVO'], ['OTHERS']]
     
-#     override_ps_set_ran = set()
+    await context.bot.send_message(chat_id=update.effective_chat.id, 
+                                   text='Select flight\n'
+                                        '/exit to exit', 
+                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Flight'))
+    return 1
 
-#     for x in everyone_list:
-#         for y in override_ps_list:
-#             if x['NAME_IN_PS'] == y['NAME_IN_PS']:
-#                 override_ps_set_ran.add(x['RANK'] + ' ' + x['DISPLAY_NAME'] if x['RANK'] != 'NIL' else x['DISPLAY_NAME'])
+# /ep [2nd] - saves FLIGHT and asks for NAME
+async def edit_personnel_flight(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    temp_edit_personnel_dict['FLIGHT'] = update.message.text
 
+    # opens the respective flight list
+    # (eg if ALPHA picked, ALPHA.json will be opened)
+    with open(f'flight_personnel/{update.message.text}.json') as flight_json:
+        flight_list = load(flight_json)
+    
+    keyboard = []
+
+    # make the keyboard such that one row has only one name
+    # format: [[NAME(1)], [NAME(2)], [NAME(3)], ...]
+    for x in flight_list:
+        keyboard.append([x['RANK'] + ' ' + x['DISPLAY_NAME'] if x['RANK'] != 'NIL' else x['DISPLAY_NAME']])
+
+    await context.bot.send_message(chat_id=update.effective_chat.id, 
+                                   text='Select a personnel\n'
+                                        '/exit to exit', 
+                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Personnel'))
+    return 2
+
+# /ep [3rd] - saves NAME and asks for FIELD (RANK, NAME_IN_PS, DISPLAY_NAME or NOR)
+async def edit_personnel_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    everyone_list = load_163()
+    
+    # obtains the display name from reply
+    DISPLAY_NAME = update.message.text if len(update.message.text.split()) == 1 else update.message.text[4:]
+
+    # obtains and saves the name in parade state of the respective personnel
+    for x in everyone_list:
+        if x['DISPLAY_NAME'] == DISPLAY_NAME:
+            temp_edit_personnel_dict['NAME_IN_PS'] = x['NAME_IN_PS']
+            break
+    
+    keyboard = [['RANK'], ['NAME_IN_PS'], ['DISPLAY_NAME'], ['NOR']]
+
+    await context.bot.send_message(chat_id=update.effective_chat.id, 
+                                   text='Select a field\n'
+                                        '/exit to exit', 
+                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Field'))
+    return 3
+
+# /ep [4th] - saves FIELD and asks for EDIT
+async def edit_personnel_field(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    temp_edit_personnel_dict['FIELD'] = update.message.text 
+    
+    await context.bot.send_message(chat_id=update.effective_chat.id, 
+                                   text=f'Type in the new {update.message.text}\n'
+                                        f'/exit to exit', 
+                                   reply_markup=ReplyKeyboardRemove())
+    return 4
+
+# /ep [5th] - saves EDIT
+async def edit_personnel_edit(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    
+    # saves the edit, clearing up any input error
+    # (eg. trailing and leading whitespaces)
+    # makes whole input caps
+    edit = update.message.text.upper().strip()
+
+    # opens the respective flight list
+    # (eg if ALPHA picked, ALPHA.json will be opened)
+    with open(f'flight_personnel/{temp_edit_personnel_dict["FLIGHT"]}.json') as flight_json:
+        flight_list = load(flight_json)
+    
+    # adds edit to the field
+    for x in flight_list:
+        if x['NAME_IN_PS'] == temp_edit_personnel_dict['NAME_IN_PS']:
+            x[temp_edit_personnel_dict['FIELD']] = edit
+    
+    # edits file with new information
+    with open(f'flight_personnel/{temp_edit_personnel_dict["FLIGHT"]}.json', 'w') as flight_json:
+        dump(flight_list, flight_json, indent=1)
+    
+    await context.bot.send_message(chat_id=update.effective_chat.id, 
+                                    text='Successfully changed!')
+    
+    return ConversationHandler.END
 
 # MISC [EXIT] - when users want to exit out of page
 async def exit(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -331,8 +464,9 @@ if __name__ == '__main__':
 
     # pee scheduler
     # updates the online sheets every 15 MINUTES
-    # <<< from 10am to 5pm >>>
-    update_online_sheets = bot.job_queue.run_repeating(load_ME_sheet, datetime.timedelta(minutes=15), datetime.time(2, 0), datetime.time(9, 0))
+    # <<< from 10am to 10pm >>>
+    update_online_sheets = bot.job_queue.run_repeating(load_ME_sheet, datetime.timedelta(minutes=15), datetime.time(2, 0), datetime.time(14, 0))
+    update_merged_cells = bot.job_queue.run_repeating(obtain_merged_cells, datetime.timedelta(minutes=15), datetime.time(2, 0), datetime.time(14, 0))
 
     # /start
     bot.add_handler(CommandHandler('start', start))
@@ -348,6 +482,17 @@ if __name__ == '__main__':
 
     # /update
     bot.add_handler(CommandHandler('update', update_all))
+
+    # /oa
+    obtain_files_handler = ConversationHandler(
+        entry_points=[CommandHandler('obtainfiles', obtain_files_start)],
+        states={
+            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, obtain_files_flight)]
+        },
+        fallbacks=[CommandHandler('exit', exit)]
+    )
+
+    bot.add_handler(obtain_files_handler)
 
     # /f [DATE]
     bot.add_handler(CommandHandler('f', print_ps))
@@ -373,5 +518,19 @@ if __name__ == '__main__':
     )
 
     bot.add_handler(override_ps_add_handler)
+
+    # /ep
+    edit_personnel_handler = ConversationHandler(
+        entry_points=[CommandHandler('ep', edit_personnel_start)],
+        states={
+            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, edit_personnel_flight)],
+            2: [MessageHandler(filters.TEXT & ~filters.COMMAND, edit_personnel_name)],
+            3: [MessageHandler(filters.TEXT & ~filters.COMMAND, edit_personnel_field)],
+            4: [MessageHandler(filters.TEXT & ~filters.COMMAND, edit_personnel_edit)]
+        },
+        fallbacks=[CommandHandler('exit', exit)]
+    )
+
+    bot.add_handler(edit_personnel_handler)
     
     bot.run_polling()

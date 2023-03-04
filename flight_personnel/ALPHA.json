@@ -36,10 +36,10 @@
   "NOR": "NSF"
  },
  {
-    "RANK": "2LT",
-    "DISPLAY_NAME": "WUI DUO",
-    "NAME_IN_PS": "WUI DUO",
-    "NOR": "REGULAR"
+  "RANK": "2LT",
+  "DISPLAY_NAME": "WUI DUO",
+  "NAME_IN_PS": "WUI DUO",
+  "NOR": "REGULAR"
  },
  {
   "RANK": "2LT",
@@ -120,10 +120,10 @@
   "NOR": "REGUALR"
  },
  {
-    "RANK": "2SG",
-    "DISPLAY_NAME": "BRYAN",
-    "NAME_IN_PS": "BRYAN LEE",
-    "NOR": "REGUALR"
+  "RANK": "2SG",
+  "DISPLAY_NAME": "BRYAN",
+  "NAME_IN_PS": "BRYAN LEE",
+  "NOR": "REGUALR"
  },
  {
   "RANK": "2SG",

@@ -2,7 +2,6 @@ import pandas as pd
 from ujson import load
 import datetime
 import re
-import os
 
 # loads in ME/ADW google sheet and returns it as a dataframe
 def csv_to_dataframe(month_num, year, thing):
@@ -105,6 +104,9 @@ def load_ME_sheet(DATE):
     
     with open('override/override_ps.json') as override_ps_json:
         override_ps_list = load(override_ps_json)
+    
+    with open('override/merged_cells.json') as merged_cells_json:
+        merged_cells_list = load(merged_cells_json)
 
     # load in ME sheet
     ME_df = open_sheet(DATE, 'ME')
@@ -125,11 +127,19 @@ def load_ME_sheet(DATE):
         if ME_df.iloc[x, 0] != 'NIL' and x != 60:
             update('NAME_IN_PS', ME_df.iloc[x, 0].upper().strip(), 'STATUS_IN_PS', re.sub('\s*/\s*', '/', ME_df.iloc[x, DAY].upper().strip()))
     
+    # function that does the override
+    def update_from_list(list_in_question):
+        for x in list_in_question:
+            if datetime_convert(x['START_DATE']) <= datetime_convert(DATE) <= datetime_convert(x['END_DATE']):
+                update('NAME_IN_PS', x['NAME_IN_PS'], 'STATUS_IN_PS', x['STATUS_IN_PS'])
+    
+    # adds in the merged cells
+    # CSV does not contain the merged cells
+    update_from_list(merged_cells_list)
+
     # HIGHEST PRIORITY
-    # override status from ME sheet
-    for x in override_ps_list:
-        if datetime_convert(x['START_DATE']) <= datetime_convert(DATE) <= datetime_convert(x['END_DATE']):
-            update('NAME_IN_PS', x['NAME_IN_PS'], 'STATUS_IN_PS', x['STATUS_IN_PS'])
+    # override that is manually inputted
+    update_from_list(override_ps_list)
     
     # assign everyone a number to their rank for easy sorting
     for x in rank_sorting_dict:
@@ -402,7 +412,6 @@ def front_ps(DATE, cos, flight):
 
     return known_ps, unknown_ps
     
-
 def middle_ps(DATE, bf_pax, lunch_pax, dinner_pax, flight):
     
     global everyone_list
