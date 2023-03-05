@@ -91,6 +91,14 @@ async def update_all(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(chat_id=update.effective_chat.id, text=print_status_string())
 
+# ------------------------------------------------TEMP FIX------------------------------------------------
+async def update_run_repeating(context: ContextTypes.DEFAULT_TYPE):
+
+    download_adw_and_me()
+    obtain_merged_cells()
+
+    await context.bot.send_message(chat_id='1006352442', text=print_status_string())
+
 # ------------------------------------------------/OBTAINFILES------------------------------------------------
 # /OBTAINFILES [1st] - asks for FLUGHT
 async def obtain_files_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -465,8 +473,7 @@ if __name__ == '__main__':
     # pee scheduler
     # updates the online sheets every 15 MINUTES
     # <<< from 10am to 10pm >>>
-    update_online_sheets = bot.job_queue.run_repeating(load_ME_sheet, datetime.timedelta(minutes=15), datetime.time(2, 0), datetime.time(14, 0))
-    update_merged_cells = bot.job_queue.run_repeating(obtain_merged_cells, datetime.timedelta(minutes=15), datetime.time(2, 0), datetime.time(14, 0))
+    update_pee_scheduler = bot.job_queue.run_repeating(update_run_repeating, datetime.timedelta(minutes=15), datetime.time(2, 0), datetime.time(14, 0))
 
     # /start
     bot.add_handler(CommandHandler('start', start))
