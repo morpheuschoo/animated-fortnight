@@ -24,8 +24,7 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                                                           '(eg 20th Jan 2023 will be written as 200123)\n')
 
     await context.bot.send_message(chat_id=update.effective_chat.id,
-                                   text='Stuff you can do with the bot:\n\n'
-                                        'TERMS OF REFERENCE:\n'
+                                   text='TERMS OF REFERENCE:\n'
                                         '/tor - gives you the places where the bot takes information from\n\n'
                                         'PARADE STATE / DUTY COMMANDS:\n'
                                         '/f [DATE] - generates the parade state\n'
@@ -38,26 +37,25 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                         '/oa - add to override list\n'
                                         '/or - remove from override list\n\n'
                                         'EDIT PERSONNEL:\n'
+                                        '/obtainfiles - obtain personnel file\n'
                                         '/ep - edit personnel file\n\n'
                                         'ADMIN COMMANDS:\n'
                                         '/status - shows when was data last updated\n'
-                                        '/update - updates the database\n'
-                                        '/obtainfiles - obtain personnel file')
+                                        '/update - updates the database\n')
 
 # ------------------------------------------------/TOR------------------------------------------------
 async def tor(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id,
-                                   text='FOR TO:\n'
-                                        '**Check your OSN email**\n\n'
-                                        'https://docs.google.com/spreadsheets/d/1whbTO1tvIa2FpMyVTVTJZWsRjWRIqVPzPAGY4BGfrSk/edit?usp=drivesdk')
-
-    await context.bot.send_message(chat_id=update.effective_chat.id,
-                                   text='FOR G1, G2 and G3A:\n\n'
-                                        'https://docs.google.com/spreadsheets/d/1TwTIG7XdT1RRWzm8XCtbuWyKcMMdXwGr/edit')
-    
-    await context.bot.send_message(chat_id=update.effective_chat.id,
-                                   text='FOR literally everything else:\n\n'
-                                        'https://docs.google.com/spreadsheets/d/1rXLXxWMSpb8hU_BRuI87jv7wS04tB6yD')
+                                   text='\<\<\< TERMS OF REFERENCE \>\>\>\n\n'
+                                        'FOR TO: '
+                                        'CHECK OSN EMAIL\n'
+                                        'FOR CSS: '
+                                        '[LINK](https://docs.google.com/spreadsheets/d/1whbTO1tvIa2FpMyVTVTJZWsRjWRIqVPzPAGY4BGfrSk/edit?usp=drivesdk)\n'
+                                        'FOR WEAPON CONTROLLERS: '
+                                        '[LINK](https://docs.google.com/spreadsheets/d/1TwTIG7XdT1RRWzm8XCtbuWyKcMMdXwGr/edit)\n'
+                                        'FOR ME SHEETS: '
+                                        '[LINK](https://docs.google.com/file/d/1rXLXxWMSpb8hU_BRuI87jv7wS04tB6yD/edit?usp=docslist_api)\n',
+                                        parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 # ------------------------------------------------MAKES THE STRING TO BE USED IN /STATUS and /UPDATE------------------------------------------------
 def print_status_string():
@@ -92,12 +90,12 @@ async def update_all(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text=print_status_string())
 
 # ------------------------------------------------TEMP FIX------------------------------------------------
-async def update_run_repeating(context: ContextTypes.DEFAULT_TYPE):
+async def run_pee_scheduler(context: ContextTypes.DEFAULT_TYPE):
 
     download_adw_and_me()
     obtain_merged_cells()
 
-    await context.bot.send_message(chat_id='1006352442', text=print_status_string())
+    await context.bot.send_message(chat_id='1006352442', text=print_status_string(), disable_notification=True)
 
 # ------------------------------------------------/OBTAINFILES------------------------------------------------
 # /OBTAINFILES [1st] - asks for FLUGHT
@@ -149,7 +147,7 @@ async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # sends the parade state
         await context.bot.send_message(chat_id=update.effective_chat.id, text = f'{known_ps}'
                                                                                 f'---------------------------------------------------\n\n'
-                                                                                f'{middle_ps(DATE, 5, 7, 5, "alpha")}'
+                                                                                f'{middle_ps(DATE, 5, 6, 5, "alpha")}'
                                                                                 f'---------------------------------------------------\n\n'
                                                                                 f'{end_ps(DATE)}')
 
@@ -473,7 +471,7 @@ if __name__ == '__main__':
     # pee scheduler
     # updates the online sheets every 15 MINUTES
     # <<< from 10am to 10pm >>>
-    update_pee_scheduler = bot.job_queue.run_repeating(update_run_repeating, datetime.timedelta(minutes=15), datetime.time(2, 0), datetime.time(14, 0))
+    update_pee_scheduler = bot.job_queue.run_repeating(run_pee_scheduler, datetime.timedelta(minutes=15), datetime.time(2, 0), datetime.time(14, 0))
 
     # /start
     bot.add_handler(CommandHandler('start', start))
