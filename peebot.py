@@ -85,7 +85,7 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def update_all(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text='Updating...')
 
-    run_pee_scheduler(context)
+    await run_pee_scheduler(context)
 
     await context.bot.send_message(chat_id=update.effective_chat.id, text=print_status_string())
 
