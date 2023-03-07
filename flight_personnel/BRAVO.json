@@ -25,14 +25,14 @@
  },
  {
   "RANK": "LTA",
-  "DISPLAY_NAME": "NAVEEN",
-  "NAME_IN_PS": "NAVEEN",
+  "DISPLAY_NAME": "ROY",
+  "NAME_IN_PS": "ROY",
   "NOR": "REGULAR"
  },
  {
   "RANK": "LTA",
-  "DISPLAY_NAME": "ROY",
-  "NAME_IN_PS": "ROY",
+  "DISPLAY_NAME": "NAVEEN",
+  "NAME_IN_PS": "NAVEEN",
   "NOR": "REGULAR"
  },
  {
@@ -110,7 +110,7 @@
  {
   "RANK": "2SG",
   "DISPLAY_NAME": "NICHOLAS",
-  "NAME_IN_PS": "(RIGG) NICHOLAS ",
+  "NAME_IN_PS": "(RIGG) NICHOLAS",
   "NOR": "REGULAR"
  },
  {

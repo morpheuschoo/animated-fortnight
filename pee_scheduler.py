@@ -5,6 +5,12 @@ from ujson import load, dump
 from pytz import timezone
 from pee_maker import csv_to_dataframe
 
+# ------------------------------------------------RUNS THE WHOLE SHOW!!!------------------------------------------------
+async def run_pee_scheduler(context):
+
+    download_adw_and_me()
+    obtain_merged_cells()
+
 def download_adw_and_me():
     
     # remove all files from the ME and ADW folder

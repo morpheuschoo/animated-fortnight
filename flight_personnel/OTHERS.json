@@ -1,8 +1,32 @@
 [
  {
+  "RANK": "NIL",
+  "DISPLAY_NAME": "DEVARAJ",
+  "NAME_IN_PS": "(SUP) DEVARAJ",
+  "NOR": "REGULAR"
+ },
+ {
+  "RANK": "NIL",
+  "DISPLAY_NAME": "LUIS HUANG",
+  "NAME_IN_PS": "LUIS HUANG",
+  "NOR": "REGULAR"
+ },
+ {
+  "RANK": "1WO",
+  "DISPLAY_NAME": "MICHAEL EU",
+  "NAME_IN_PS": "(SUP) MICHAEL EU",
+  "NOR": "REGULAR"
+ },
+ {
   "RANK": "2WO",
   "DISPLAY_NAME": "DANIEL",
   "NAME_IN_PS": "(SUP) DANIEL",
+  "NOR": "REGULAR"
+ },
+ {
+  "RANK": "3WO",
+  "DISPLAY_NAME": "CHEOK",
+  "NAME_IN_PS": "(SUP) CHEOK",
   "NOR": "REGULAR"
  },
  {
@@ -18,51 +42,15 @@
   "NOR": "REGULAR"
  },
  {
-  "RANK": "SSG",
-  "DISPLAY_NAME": "YEO BELLAMY",
-  "NAME_IN_PS": "YEO BELLAMY",
-  "NOR": "REGULAR"
- },
- {
-  "RANK": "SSG",
-  "DISPLAY_NAME": "YEW SENG",
-  "NAME_IN_PS": "(SUP) YEW SENG",
-  "NOR": "REGULAR"
- },
- {
-  "RANK": "SSG",
-  "DISPLAY_NAME": "JIAN HONG",
-  "NAME_IN_PS": "(SUP) JIAN HONG",
-  "NOR": "REGULAR"
- },
- {
-  "RANK": "1WO",
-  "DISPLAY_NAME": "MICHAEL EU",
-  "NAME_IN_PS": "(SUP) MICHAEL EU",
-  "NOR": "REGULAR"
- },
- {
-  "RANK": "NIL",
-  "DISPLAY_NAME": "DEVARAJ",
-  "NAME_IN_PS": "(SUP) DEVARAJ",
-  "NOR": "REGULAR"
- },
- {
-  "RANK": "3WO",
-  "DISPLAY_NAME": "CHEOK",
-  "NAME_IN_PS": "(SUP) CHEOK",
-  "NOR": "REGULAR"
- },
- {
-  "RANK": "NIL",
-  "DISPLAY_NAME": "LUIS HUANG",
-  "NAME_IN_PS": "LUIS HUANG",
-  "NOR": "REGULAR"
- },
- {
   "RANK": "3WO",
   "DISPLAY_NAME": "RONG PO",
   "NAME_IN_PS": "RONG PO",
+  "NOR": "REGULAR"
+ },
+ {
+  "RANK": "3WO",
+  "DISPLAY_NAME": "ASHOK",
+  "NAME_IN_PS": "(SUP) ASHOK",
   "NOR": "REGULAR"
  },
  {
@@ -72,9 +60,21 @@
   "NOR": "REGULAR"
  },
  {
-  "RANK": "3WO",
-  "DISPLAY_NAME": "ASHOK",
-  "NAME_IN_PS": "(SUP) ASHOK",
+  "RANK": "SSG",
+  "DISPLAY_NAME": "JIAN HONG",
+  "NAME_IN_PS": "(SUP) JIAN HONG",
+  "NOR": "REGULAR"
+ },
+ {
+  "RANK": "SSG",
+  "DISPLAY_NAME": "YEO BELLAMY",
+  "NAME_IN_PS": "YEO BELLAMY",
+  "NOR": "REGULAR"
+ },
+ {
+  "RANK": "SSG",
+  "DISPLAY_NAME": "YEW SENG",
+  "NAME_IN_PS": "(SUP) YEW SENG",
   "NOR": "REGULAR"
  }
 ]

@@ -153,7 +153,7 @@ def load_standby_and_duty():
 
         # remove personnel from list who do not have a rank
         for x in temp_list:
-            if x['RANK_SORT'] == 'NIL':
+            if x['RANK_SORT'] == 100:
                 temp_list.remove(x)
 
         # sort list by rank
@@ -419,7 +419,7 @@ def middle_ps(DATE, bf_pax, lunch_pax, dinner_pax, flight):
     # <<< LUNCHERS ensures that NSF's are placed in the lunch first BEFORE REGULARS >>>
     
     # grabs the people that are present, from the flight stated and have a rank in the system
-    lunchers = [x for x in everyone_list if x['CATEGORY'] == 'PRESENT' and x['FLIGHT'] == flight.upper() and x['RANK_SORT'] != 'NIL']
+    lunchers = [x for x in everyone_list if x['CATEGORY'] == 'PRESENT' and x['FLIGHT'] == flight.upper()]
 
     # these people are sorted by NSF/REGULAR and then by rank
     # lowest rank/NSF -> highest rank/NSF -> lowest rank/REGULAR -> highest rank/REGULAR

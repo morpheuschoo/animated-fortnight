@@ -2,7 +2,8 @@ import logging
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import filters, ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, ConversationHandler
 from pee_maker import *
-from pee_scheduler import download_adw_and_me, obtain_merged_cells
+from pee_scheduler import run_pee_scheduler
+from pee_editor import convert_flight_personnel_to_excel, edit_flight_personnel_files
 import os
 from ujson import dump
 from pytz import timezone
@@ -84,37 +85,18 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def update_all(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text='Updating...')
 
-    download_adw_and_me()
-    obtain_merged_cells()
+    run_pee_scheduler(context)
 
     await context.bot.send_message(chat_id=update.effective_chat.id, text=print_status_string())
 
-# ------------------------------------------------TEMP FIX------------------------------------------------
-async def run_pee_scheduler(context: ContextTypes.DEFAULT_TYPE):
-
-    download_adw_and_me()
-    obtain_merged_cells()
-
-    await context.bot.send_message(chat_id='1006352442', text=print_status_string(), disable_notification=True)
-
 # ------------------------------------------------/OBTAINFILES------------------------------------------------
-# /OBTAINFILES [1st] - asks for FLUGHT
-async def obtain_files_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [['ALPHA'], ['BRAVO'], ['OTHERS']]
+async def obtain_files(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
-    await context.bot.send_message(chat_id=update.effective_chat.id, 
-                                   text='Select flight\n'
-                                        '/exit to exit', 
-                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Flight'))
-    return 1
+    # makes the file to be sent
+    convert_flight_personnel_to_excel()
 
-# /OBTAIN FILES [2nd] - returns respective file
-async def obtain_files_flight(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_document(update.effective_chat.id,
-                                    open(f'flight_personnel/{update.message.text}.json', 'rb'),
-                                    reply_markup=ReplyKeyboardRemove())
-
-    return ConversationHandler.END
+                                    open(f'files_on_the_move/to_be_sent/flight_personnel.xlsx', 'rb'))
 
 # ------------------------------------------------/f [DATE]------------------------------------------------
 async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -359,96 +341,57 @@ async def override_ps_add_date(update: Update, context: ContextTypes.DEFAULT_TYP
         return 3
 
 # ------------------------------------------------/EP------------------------------------------------
-temp_edit_personnel_dict = dict.fromkeys(['FLIGHT', 'NAME_IN_PS', 'FIELD'])
-
-# /ep [1st] - asks for FLIGHT
+# /ep [1st] - sends FLIGHT_PERSONNEL FILE and INSTRUCTIONS
 async def edit_personnel_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [['ALPHA'], ['BRAVO'], ['OTHERS']]
-    
-    await context.bot.send_message(chat_id=update.effective_chat.id, 
-                                   text='Select flight\n'
-                                        '/exit to exit', 
-                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Flight'))
+    await obtain_files(update, context)
+
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text='NOTE: there is no need for the rank to be in order'
+    )
+
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text='<<< INSTRUCTIONS >>>\n\n'
+             '1st column - ALPHA\n'
+             '2nd column - BRAVO\n'
+             '3rd column - OTHERS\n\n'
+             'TO ADD PERSONNEL:\n'
+             'just add personnel at the bottom\n'
+             '(make sure to fill in everything)\n\n'
+             'TO EDIT:\n'
+             'just edit lol\n\n'
+    )
+
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text='Once done just send the file back to me \U0001F601\U0001F601\U0001F601\n'
+             "(don't change the file name)"
+    )
+
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text='/exit to exit'
+    )
+
     return 1
 
-# /ep [2nd] - saves FLIGHT and asks for NAME
-async def edit_personnel_flight(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    temp_edit_personnel_dict['FLIGHT'] = update.message.text
-
-    # opens the respective flight list
-    # (eg if ALPHA picked, ALPHA.json will be opened)
-    with open(f'flight_personnel/{update.message.text}.json') as flight_json:
-        flight_list = load(flight_json)
+# /ep [2nd] - saves FLIGHT_PERSONNEL FILE
+async def edit_personnel_end(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
-    keyboard = []
-
-    # make the keyboard such that one row has only one name
-    # format: [[NAME(1)], [NAME(2)], [NAME(3)], ...]
-    for x in flight_list:
-        keyboard.append([x['RANK'] + ' ' + x['DISPLAY_NAME'] if x['RANK'] != 'NIL' else x['DISPLAY_NAME']])
-
-    await context.bot.send_message(chat_id=update.effective_chat.id, 
-                                   text='Select a personnel\n'
-                                        '/exit to exit', 
-                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Personnel'))
-    return 2
-
-# /ep [3rd] - saves NAME and asks for FIELD (RANK, NAME_IN_PS, DISPLAY_NAME or NOR)
-async def edit_personnel_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    everyone_list = load_163()
+    # saves file in respective folder
+    FILE = await update.message.effective_attachment.get_file()
+    await FILE.download_to_drive('files_on_the_move/to_be_received/flight_personnel.xlsx')
     
-    # obtains the display name from reply
-    DISPLAY_NAME = update.message.text if len(update.message.text.split()) == 1 else update.message.text[4:]
+    # runs program to sort and cache files
+    edit_flight_personnel_files()
 
-    # obtains and saves the name in parade state of the respective personnel
-    for x in everyone_list:
-        if x['DISPLAY_NAME'] == DISPLAY_NAME:
-            temp_edit_personnel_dict['NAME_IN_PS'] = x['NAME_IN_PS']
-            break
-    
-    keyboard = [['RANK'], ['NAME_IN_PS'], ['DISPLAY_NAME'], ['NOR']]
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text='Successfully updated!\n'
+             '/obtainfiles to see newly updated files'
+    )
 
-    await context.bot.send_message(chat_id=update.effective_chat.id, 
-                                   text='Select a field\n'
-                                        '/exit to exit', 
-                                   reply_markup=ReplyKeyboardMarkup(keyboard, input_field_placeholder='Field'))
-    return 3
-
-# /ep [4th] - saves FIELD and asks for EDIT
-async def edit_personnel_field(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    temp_edit_personnel_dict['FIELD'] = update.message.text 
-    
-    await context.bot.send_message(chat_id=update.effective_chat.id, 
-                                   text=f'Type in the new {update.message.text}\n'
-                                        f'/exit to exit', 
-                                   reply_markup=ReplyKeyboardRemove())
-    return 4
-
-# /ep [5th] - saves EDIT
-async def edit_personnel_edit(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    
-    # saves the edit, clearing up any input error
-    # (eg. trailing and leading whitespaces)
-    # makes whole input caps
-    edit = update.message.text.upper().strip()
-
-    # opens the respective flight list
-    # (eg if ALPHA picked, ALPHA.json will be opened)
-    with open(f'flight_personnel/{temp_edit_personnel_dict["FLIGHT"]}.json') as flight_json:
-        flight_list = load(flight_json)
-    
-    # adds edit to the field
-    for x in flight_list:
-        if x['NAME_IN_PS'] == temp_edit_personnel_dict['NAME_IN_PS']:
-            x[temp_edit_personnel_dict['FIELD']] = edit
-    
-    # edits file with new information
-    with open(f'flight_personnel/{temp_edit_personnel_dict["FLIGHT"]}.json', 'w') as flight_json:
-        dump(flight_list, flight_json, indent=1)
-    
-    await context.bot.send_message(chat_id=update.effective_chat.id, 
-                                    text='Successfully changed!')
-    
     return ConversationHandler.END
 
 # MISC [EXIT] - when users want to exit out of page
@@ -471,7 +414,7 @@ if __name__ == '__main__':
     # pee scheduler
     # updates the online sheets every 15 MINUTES
     # <<< from 10am to 10pm >>>
-    update_pee_scheduler = bot.job_queue.run_repeating(run_pee_scheduler, datetime.timedelta(minutes=15), datetime.time(2, 0), datetime.time(14, 0))
+    update_pee_scheduler = bot.job_queue.run_repeating(run_pee_scheduler, datetime.timedelta(minutes=15), datetime.time(0, 0))
 
     # /start
     bot.add_handler(CommandHandler('start', start))
@@ -488,16 +431,8 @@ if __name__ == '__main__':
     # /update
     bot.add_handler(CommandHandler('update', update_all))
 
-    # /oa
-    obtain_files_handler = ConversationHandler(
-        entry_points=[CommandHandler('obtainfiles', obtain_files_start)],
-        states={
-            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, obtain_files_flight)]
-        },
-        fallbacks=[CommandHandler('exit', exit)]
-    )
-
-    bot.add_handler(obtain_files_handler)
+    # /obtainfiles
+    bot.add_handler(CommandHandler('obtainfiles', obtain_files))
 
     # /f [DATE]
     bot.add_handler(CommandHandler('f', print_ps))
@@ -528,10 +463,7 @@ if __name__ == '__main__':
     edit_personnel_handler = ConversationHandler(
         entry_points=[CommandHandler('ep', edit_personnel_start)],
         states={
-            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, edit_personnel_flight)],
-            2: [MessageHandler(filters.TEXT & ~filters.COMMAND, edit_personnel_name)],
-            3: [MessageHandler(filters.TEXT & ~filters.COMMAND, edit_personnel_field)],
-            4: [MessageHandler(filters.TEXT & ~filters.COMMAND, edit_personnel_edit)]
+            1: [MessageHandler(filters.Document.ALL, edit_personnel_end)]
         },
         fallbacks=[CommandHandler('exit', exit)]
     )

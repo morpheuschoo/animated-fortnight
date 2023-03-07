@@ -25,15 +25,15 @@
  },
  {
   "RANK": "LTA",
-  "DISPLAY_NAME": "CHU HENG",
-  "NAME_IN_PS": "CHU HENG",
+  "DISPLAY_NAME": "WUI DUO",
+  "NAME_IN_PS": "WUI DUO",
   "NOR": "REGULAR"
  },
  {
-    "RANK": "LTA",
-    "DISPLAY_NAME": "WUI DUO",
-    "NAME_IN_PS": "WUI DUO",
-    "NOR": "REGULAR"
+  "RANK": "LTA",
+  "DISPLAY_NAME": "CHU HENG",
+  "NAME_IN_PS": "CHU HENG",
+  "NOR": "REGULAR"
  },
  {
   "RANK": "LTA",
@@ -120,10 +120,10 @@
   "NOR": "REGULAR"
  },
  {
-    "RANK": "2SG",
-    "DISPLAY_NAME": "BRYAN",
-    "NAME_IN_PS": "(RIGG) BRYAN LEE",
-    "NOR": "REGULAR"
+  "RANK": "2SG",
+  "DISPLAY_NAME": "BRYAN",
+  "NAME_IN_PS": "(RIGG) BRYAN LEE",
+  "NOR": "REGULAR"
  },
  {
   "RANK": "2SG",
