@@ -135,11 +135,6 @@ async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if not re.search('[0-9]{6}', DATE):
             await context.bot.send_message(chat_id=update.effective_chat.id, text='Date should be 6 numbers long -_-')
             return
-        
-        # open username_ref as a dict
-        # username_ref matches the user's username to their rank + name printed in the parade state
-        with open('references/username_ref.json') as username_ref_json:
-            username_ref_dict = load(username_ref_json)
 
         # load in all the stuff required to print parade state
         load_ME_sheet(DATE)
@@ -369,22 +364,24 @@ async def edit_personnel_start(update: Update, context: ContextTypes.DEFAULT_TYP
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text='<<< INSTRUCTIONS>>>\n\n'
+        text='\<\<\< INSTRUCTIONS \>\>\>\n\n'
              'HEADER:\n'
-             'RANK - rank of personnel\n'
-             'DISPLAY_NAME - name displayed in ps msg\n'
-             'NAME_IN_PS - name displayed in ME_df (link)\n'
-             'NOR - NSF or REGULAR\n\n'
+             'RANK \- rank of personnel\n'
+             'DISPLAY\_NAME \- name displayed in PS msg\n'
+             'NAME\_IN\_PS \- name displayed in [ME\_df](https://docs.google.com/file/d/1rXLXxWMSpb8hU_BRuI87jv7wS04tB6yD/edit?usp=docslist_api)\n'
+             'NOR \- NSF or REGULAR\n\n'
              'COLUMN REPRESENTATION:\n'
-             'COLUMN 1 - ALPHA\n'
-             'COLUMN 2 - BRAVO\n'
-             'COLUMN 3 - OTHERS\n\n'
+             'COLUMN 1 \- ALPHA\n'
+             'COLUMN 2 \- BRAVO\n'
+             'COLUMN 3 \- OTHERS\n\n'
              'EDITING THE FILE:\n'
-             'ADD personnel at the bottom of respecitve column (rank does not need to be in order)\n\n'
-             'NOTE: Fill in every detail (RANK, DISPLAY_NAME, NAME_IN_PS and NOR). If NAME_IN_PS unknown, both NAME_IN_PS and DISPLAY_NAME can be the same.\n\n'
+             'ADD personnel at the bottom of respecitve column \(rank does not need to be in order\)\n\n'
+             'NOTE: Fill in every detail \(RANK, DISPLAY\_NAME, NAME\_IN\_PS and NOR\)\. If NAME\_IN\_PS unknown, both NAME\_IN\_PS and DISPLAY\_NAME can be the same\.\n\n'
              'EDIT by just editing lol\n\n'
              'When done send the file back to me \U0001F601\n\n'
-             '/exit to exit'
+             '/exit to exit',
+             parse_mode='MarkdownV2',
+             disable_web_page_preview=True
     )
     
     return 1
