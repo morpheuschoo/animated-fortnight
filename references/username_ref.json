@@ -1,10 +1,47 @@
-{
- "morpheuschoo": "3SG MORPHEUS",
- "joshur10": "3SG JOSHUR",
- "Factatious": "3SG CALEB TAY",
- "shinroncham": "3SG SHIN RON",
- "reallyyap": "3SG YAP JAY HOW SEAN",
- "blurkeith": "3SG KEITH",
- "Mdjsoej": "3SG BRENDAN",
- "azurewaterss": "3SG HOWARD TAN"
-}
+[
+ {
+  "username": "joshur10",
+  "chat_id": "",
+  "cos": "3SG JOSHUR"
+ },
+ {
+  "username": "Factatious",
+  "chat_id": "",
+  "cos": "3SG CALEB TAY"
+ },
+ {
+  "username": "shinroncham",
+  "chat_id": "",
+  "cos": "3SG SHIN RON"
+ },
+ {
+  "username": "reallyyap",
+  "chat_id": "",
+  "cos": "3SG YAP JAY HOW SEAN"
+ },
+ {
+  "username": "blurkeith",
+  "chat_id": "",
+  "cos": "3SG KEITH"
+ },
+ {
+  "username": "Mdjsoej",
+  "chat_id": "",
+  "cos": "3SG BRENDAN"
+ },
+ {
+  "username": "azurewaterss",
+  "chat_id": "",
+  "cos": "3SG HOWARD TAN"
+ },
+ {
+  "username": "Mochawhite",
+  "chat_id": "",
+  "cos": "2SG IVAN"
+ },
+ {
+  "username": "morpheuschoo",
+  "chat_id": 1006352442,
+  "cos": "3SG MORPHEUS"
+ }
+]

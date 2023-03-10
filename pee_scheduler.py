@@ -61,7 +61,7 @@ def obtain_merged_cells():
     # i only found this garbage method to read merged cells and it can't even access other sheets, only the most recent one
     ME_df_with_merge = pd.read_html('https://docs.google.com/spreadsheets/d/1rXLXxWMSpb8hU_BRuI87jv7wS04tB6yD', index_col=0)[0].fillna('NIL')
 
-    month_alpha_ref = ["JAN", "FEB", "MAR", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPT", "OCT", "NOV", "DEC"]
+    month_alpha_ref = ["JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY", "AUGUST", "SEPT", "OCT", "NOV", "DEC"]
 
     # obtains month in alphabets of sheet
     month_alpha = ME_df_with_merge.iloc[7, 5].split('-')[1].upper()
@@ -154,7 +154,7 @@ def obtain_merged_cells():
             status_dict = load(status_json)
 
         status_dict['MERGED CELLS'][0] = datetime.datetime.now(timezone('Asia/Singapore')).strftime('%d/%m/%y at %#I:%M %p')
-        status_dict['MERGED CELLS'][1] = datetime.datetime.now(timezone('Asia/Singapore')).strftime('continue')
+        status_dict['MERGED CELLS'][1] = 'continue'
 
         with open('status.json', 'w') as status_json:
             dump(status_dict, status_json, indent=1)
@@ -164,7 +164,7 @@ def obtain_merged_cells():
         with open('status.json') as status_json:
             status_dict = load(status_json)
 
-        status_dict['MERGED CELLS'][1] = datetime.datetime.now(timezone('Asia/Singapore')).strftime('stop')
+        status_dict['MERGED CELLS'][1] = 'stop'
 
         with open('status.json', 'w') as status_json:
             dump(status_dict, status_json, indent=1)

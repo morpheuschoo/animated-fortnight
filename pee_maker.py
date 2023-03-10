@@ -6,7 +6,7 @@ import re
 # loads in ME/ADW google sheet and returns it as a dataframe
 def csv_to_dataframe(month_num, year, thing):
     
-    month_alpha_ref = ["JAN", "FEB", "MAR", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPT", "OCT", "NOV", "DEC"]
+    month_alpha_ref = ["JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY", "AUGUST", "SEPT", "OCT", "NOV", "DEC"]
 
     # converts months in numbers to months in aphabets
     month_alpha = month_alpha_ref[month_num - 1]
@@ -378,7 +378,7 @@ def front_ps(DATE, cos, flight):
         global everyone_list
 
         # making a dictionary to sort people with their respective category
-        categorically_sorted = dict.fromkeys(['PRESENT', 'DYME', 'OFF', 'C/O', 'O/S', 'CSE', 'OSL', 'LL', 'MA', 'MC', 'RSO', 'CCL', 'PCL', 'HL', 'UL', 'CL', 'FFI', 'UNKNOWN'])
+        categorically_sorted = dict.fromkeys(['PRESENT', 'DYME', 'OFF', 'C/O', 'O/S', 'CSE', 'OSL', 'LL', 'MA', 'MC', 'RSO', 'CCL', 'PCL', 'HL', 'UL', 'CL', 'FFI', 'COPE TIGER', 'UNKNOWN'])
 
         # actual sorting WOWS !!!
         for x in categorically_sorted:
@@ -473,12 +473,7 @@ def end_ps(DATE):
            f'G2: {adw_list[1]}\n' \
            f'G3A: {adw_list[2]}'
 
-def duty_compiler(username, start_date, *args):
-
-    # open username_ref as a dict
-    # username_ref matches the user's username to their rank + name printed in the parade state
-    with open('references/username_ref.json') as username_ref_json:
-        username_ref_dict = load(username_ref_json)
+def duty_compiler(cos, start_date, *args):
     
     # convert [DD][MM][YY] to datetime
     start_datetime = datetime_convert(start_date)
@@ -497,7 +492,7 @@ def duty_compiler(username, start_date, *args):
         load_ME_sheet(start_datetime.strftime('%d%m%y'))
         
         combine += end_ps(start_datetime.strftime('%d%m%y')) + '\n'
-        combine += f'\nCOS: {username_ref_dict[username]}\n\n---------------------------------------------------\n'
+        combine += f'\nCOS: {cos}\n\n---------------------------------------------------\n'
         
         start_datetime += datetime.timedelta(days=1)
 

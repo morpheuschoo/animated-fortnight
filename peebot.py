@@ -98,6 +98,28 @@ async def obtain_files(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_document(update.effective_chat.id,
                                     open(f'files_on_the_move/to_be_sent/flight_personnel.xlsx', 'rb'))
 
+# ------------------------------------------------TEMP PROCESSESS USERNAME------------------------------------------------
+def username_processor(chat_id, username):
+    
+    # open username_ref as a list
+    with open('references/username_ref.json') as username_ref_json:
+        username_ref_list = load(username_ref_json)
+
+    for x in username_ref_list:
+        if username == x['username'] or chat_id == x['chat_id']:
+            x['chat_id'] = chat_id
+            cos = x['cos']
+    
+    if not username in [x['username'] for x in username_ref_list] and not chat_id in [x['chat_id'] for x in username_ref_list]:
+        username_ref_list.append({'username': username, 'chat_id': chat_id, 'cos': ''})
+        
+        cos = ''
+    
+    with open('references/username_ref.json', 'w') as username_ref_json:
+            dump(username_ref_list, username_ref_json, indent=1)
+    
+    return cos
+
 # ------------------------------------------------/f [DATE]------------------------------------------------
 async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
@@ -124,7 +146,7 @@ async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
         update_adw(DATE)
         categorise_ps()
 
-        known_ps, unknown_ps = front_ps(DATE, username_ref_dict[update.message.from_user.username], "alpha")
+        known_ps, unknown_ps = front_ps(DATE, username_processor(update.effective_chat.id, update.message.from_user.username), "alpha")
 
         # sends the parade state
         await context.bot.send_message(chat_id=update.effective_chat.id, text = f'{known_ps}'
@@ -146,7 +168,7 @@ async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def print_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         
-        # if no date inputted, next day parade state is generated
+        # if no date inputted, next day + next next day duty crew is generated
         # in Singapore timezone
         if len(context.args) != 1:
             DATE = (datetime.datetime.now(timezone('Asia/Singapore')) + datetime.timedelta(days=1)).strftime('%d%m%y')
@@ -158,7 +180,7 @@ async def print_weekend_duty(update: Update, context: ContextTypes.DEFAULT_TYPE)
             await context.bot.send_message(chat_id=update.effective_chat.id, text='Date should be 6 numbers long -_-')
             return
 
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=f'{duty_compiler(update.message.from_user.username, DATE)}')
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=duty_compiler(username_processor(update.effective_chat.id, update.message.from_user.username), DATE))
     
     except:
         await context.bot.send_message(chat_id=update.effective_chat.id, text='The bot is broken or you didnt type in a valid date (uh oh)')
@@ -176,14 +198,14 @@ async def print_multiple_weekend_duty(update: Update, context: ContextTypes.DEFA
             await context.bot.send_message(chat_id=update.effective_chat.id, text='Dates should be 6 numbers long -_-')
             return
 
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=f'{duty_compiler(update.message.from_user.username, start_date, end_date)}')
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=duty_compiler(username_processor(update.effective_chat.id, update.message.from_user.username), start_date, end_date))
     
     except:
         await context.bot.send_message(chat_id=update.effective_chat.id, text='The bot is broken or you didnt type in valid dates (uh oh)')
         await context.bot.send_message(chat_id=update.effective_chat.id, text='\U0001F613')
         return
     
-# /ol
+# ------------------------------------------------/OL------------------------------------------------
 async def print_override_ps_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with open('override/merged_cells.json') as merged_cells_json:
         merged_cells_list = load(merged_cells_json)
@@ -347,33 +369,24 @@ async def edit_personnel_start(update: Update, context: ContextTypes.DEFAULT_TYP
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text='NOTE: there is no need for the rank to be in order'
+        text='<<< INSTRUCTIONS>>>\n\n'
+             'HEADER:\n'
+             'RANK - rank of personnel\n'
+             'DISPLAY_NAME - name displayed in ps msg\n'
+             'NAME_IN_PS - name displayed in ME_df (link)\n'
+             'NOR - NSF or REGULAR\n\n'
+             'COLUMN REPRESENTATION:\n'
+             'COLUMN 1 - ALPHA\n'
+             'COLUMN 2 - BRAVO\n'
+             'COLUMN 3 - OTHERS\n\n'
+             'EDITING THE FILE:\n'
+             'ADD personnel at the bottom of respecitve column (rank does not need to be in order)\n\n'
+             'NOTE: Fill in every detail (RANK, DISPLAY_NAME, NAME_IN_PS and NOR). If NAME_IN_PS unknown, both NAME_IN_PS and DISPLAY_NAME can be the same.\n\n'
+             'EDIT by just editing lol\n\n'
+             'When done send the file back to me \U0001F601\n\n'
+             '/exit to exit'
     )
-
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text='<<< INSTRUCTIONS >>>\n\n'
-             '1st column - ALPHA\n'
-             '2nd column - BRAVO\n'
-             '3rd column - OTHERS\n\n'
-             'TO ADD PERSONNEL:\n'
-             'just add personnel at the bottom\n'
-             '(make sure to fill in everything)\n\n'
-             'TO EDIT:\n'
-             'just edit lol\n\n'
-    )
-
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text='Once done just send the file back to me \U0001F601\U0001F601\U0001F601\n'
-             "(don't change the file name)"
-    )
-
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text='/exit to exit'
-    )
-
+    
     return 1
 
 # /ep [2nd] - saves FLIGHT_PERSONNEL FILE
