@@ -60,6 +60,11 @@
   "CATEGORY": "O\/S"
  },
  {
+  "DOMINANT_STATUS": "H",
+  "DISPLAY_STATUS": "H",
+  "CATEGORY": "O\/S"
+ },
+ {
   "DOMINANT_STATUS": "R",
   "DISPLAY_STATUS": "R",
   "CATEGORY": "O\/S"
