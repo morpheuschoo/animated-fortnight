@@ -139,7 +139,7 @@ async def print_ps(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # load in all the stuff required to print parade state
         load_ME_sheet(DATE)
         update_adw(DATE)
-        load_override_lists()
+        load_override_lists(DATE)
         categorise_ps()
 
         known_ps, unknown_ps = front_ps(DATE, username_processor(update.effective_chat.id, update.message.from_user.username), "alpha")
