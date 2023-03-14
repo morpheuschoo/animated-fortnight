@@ -269,7 +269,7 @@ def update_adw(DATE):
             else:
                 update('NAME_IN_PS', callsign_ref_dict[callsign], 'STATUS_IN_PS', 'HFD')
 
-def load_override_lists():
+def load_override_lists(DATE):
     
     global everyone_list
     
