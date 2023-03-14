@@ -101,12 +101,6 @@ def load_ME_sheet(DATE):
 
     with open('references/rank_sorting.json') as rank_sorting_json:
         rank_sorting_dict = load(rank_sorting_json)
-    
-    with open('override/override_ps.json') as override_ps_json:
-        override_ps_list = load(override_ps_json)
-    
-    with open('override/merged_cells.json') as merged_cells_json:
-        merged_cells_list = load(merged_cells_json)
 
     # load in ME sheet
     ME_df = open_sheet(DATE, 'ME')
@@ -126,20 +120,6 @@ def load_ME_sheet(DATE):
     for x in range(9, len(ME_df) - 33):
         if ME_df.iloc[x, 0] != 'NIL':
             update('NAME_IN_PS', ME_df.iloc[x, 0].upper().strip(), 'STATUS_IN_PS', re.sub('\s*/\s*', '/', ME_df.iloc[x, DAY].upper().strip()))
-    
-    # function that does the override
-    def update_from_list(list_in_question):
-        for x in list_in_question:
-            if datetime_convert(x['START_DATE']) <= datetime_convert(DATE) <= datetime_convert(x['END_DATE']):
-                update('NAME_IN_PS', x['NAME_IN_PS'], 'STATUS_IN_PS', x['STATUS_IN_PS'])
-    
-    # adds in the merged cells
-    # CSV does not contain the merged cells
-    update_from_list(merged_cells_list)
-
-    # HIGHEST PRIORITY
-    # override that is manually inputted
-    update_from_list(override_ps_list)
     
     # assign everyone a number to their rank for easy sorting
     for x in rank_sorting_dict:
@@ -288,6 +268,30 @@ def update_adw(DATE):
                 update('NAME_IN_PS', callsign_ref_dict[callsign], 'STATUS_IN_PS', 'R')
             else:
                 update('NAME_IN_PS', callsign_ref_dict[callsign], 'STATUS_IN_PS', 'HFD')
+
+def load_override_lists():
+    
+    global everyone_list
+    
+    with open('override/override_ps.json') as override_ps_json:
+        override_ps_list = load(override_ps_json)
+    
+    with open('override/merged_cells.json') as merged_cells_json:
+        merged_cells_list = load(merged_cells_json)
+    
+    # function that does the override
+    def update_from_list(list_in_question):
+        for x in list_in_question:
+            if datetime_convert(x['START_DATE']) <= datetime_convert(DATE) <= datetime_convert(x['END_DATE']):
+                update('NAME_IN_PS', x['NAME_IN_PS'], 'STATUS_IN_PS', x['STATUS_IN_PS'])
+    
+    # adds in the merged cells
+    # CSV does not contain the merged cells
+    update_from_list(merged_cells_list)
+
+    # HIGHEST PRIORITY
+    # override that is manually inputted
+    update_from_list(override_ps_list)
 
 def categorise_ps():
     
